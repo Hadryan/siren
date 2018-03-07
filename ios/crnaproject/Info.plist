@@ -51,6 +51,9 @@
 				<true/>
 			</dict>
 		</dict>
+		<!-- allow http request -->
+		<key>NSAllowsArbitraryLoads</key>
+    <true/>
 	</dict>
 </dict>
 </plist>
