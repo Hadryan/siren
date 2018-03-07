@@ -5,7 +5,8 @@ import {
   StyleSheet,
   StatusBar,
   FlatList,
-  ScrollView
+  ScrollView,
+  RefreshControl
 } from 'react-native'
 
 import Panel from '../src/components/Panel'
@@ -17,17 +18,31 @@ import Api from '../src/lib/api'
 class Home extends Component {
   state = {
     topList: [],
-    newAlbums: []
+    newAlbums: [],
+    refreshing: false
   }
   componentWillMount () {
-    Api.topPlayList().then((response) => {
+    this.fetchData()
+  }
+  fetchData () {
+    this.setState({refreshing: true})
+
+    Promise.all(
+      [
+        Api.topPlayList().then((response) => {
+          this.setState({
+            topList: response.playlists
+          })
+        }),
+        Api.newAlbums().then((response) => {
+          this.setState({
+            newAlbums: response.albums
+          })
+        })
+      ]
+    ).then(() => {
       this.setState({
-        topList: response.playlists
-      })
-    })
-    Api.newAlbums().then((response) => {
-      this.setState({
-        newAlbums: response.albums
+        refreshing: false
       })
     })
   }
@@ -36,6 +51,8 @@ class Home extends Component {
       <View style={styles.container}>
         <StatusBar
           barStyle="light-content"
+          // translucent
+          backgroundColor="#12686b"
         ></StatusBar>
         <View style={styles.search}>
           <View style={styles.searchBox}>
@@ -47,7 +64,16 @@ class Home extends Component {
         </View>
         
         <View style={styles.list}>
-          <ScrollView>
+          <ScrollView
+            refreshControl={
+              <RefreshControl 
+                refreshing={this.state.refreshing}
+                onRefresh={() => {
+                  this.fetchData()
+                }}
+              />
+            }
+          >
             <Panel
               title="推荐"
             >
@@ -82,7 +108,6 @@ class Home extends Component {
             </Panel>
           </ScrollView>
         </View>
-        <Text>123</Text>
       </View>
     )
   }
@@ -93,8 +118,9 @@ const styles = StyleSheet.create({
     flex: 1
   },
   list: {
-    height: '100%',
-    width: '100%'
+    flex: 1,
+    width: '100%',
+    flexGrow: 1
   },
   search: {
     height: 100,

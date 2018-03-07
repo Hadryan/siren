@@ -5,12 +5,17 @@ import {
   Image,
   StyleSheet
 } from 'react-native'
+import FastImage from 'react-native-fast-image'
 
 class PlayList extends Component {
   render () {
     return (
       <View style={styles.container}>
-        <Image source={{uri: this.props.data.coverImgUrl}} style={styles.cover}></Image>
+        <FastImage
+          source={{uri: this.props.data.coverImgUrl}}
+          style={styles.cover}
+          borderRadius={10}
+        ></FastImage>
         <Text
           numberOfLines={2}
           style={styles.name}
@@ -26,8 +31,7 @@ const styles = StyleSheet.create({
   },
   cover: {
     width: 150,
-    height: 150,
-    borderRadius: 10
+    height: 150
   },
   name: {
     color: '#444',

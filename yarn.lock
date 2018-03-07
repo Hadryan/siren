@@ -3335,6 +3335,12 @@ react-native-blur@^3.2.2:
   dependencies:
     prop-types "^15.5.10"
 
+react-native-fast-image@^2.2.5:
+  version "2.2.5"
+  resolved "http://registry.npm.taobao.org/react-native-fast-image/download/react-native-fast-image-2.2.5.tgz#dd0eaee24446a9546a2edce04ddbd60b3a4c547c"
+  dependencies:
+    prop-types "^15.5.10"
+
 react-native@0.52.0:
   version "0.52.0"
   resolved "http://registry.npm.taobao.org/react-native/download/react-native-0.52.0.tgz#9784663a2aa40b30c87d4c9c06ef26cf8d419d91"
