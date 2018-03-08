@@ -3,12 +3,16 @@ import { View } from 'react-native'
 import { NativeRouter, Route } from 'react-router-native'
 
 import Home from './views/Home'
+import Search from './views/Search'
 
 class App extends Component {
   render () {
     return (
       <NativeRouter>
-        <Route exact path="/" component={Home}></Route>
+        <View style={{flex: 1}}>
+          <Route exact path="/" component={Home}></Route>
+          <Route path="/search" component={Search}></Route>
+        </View>
       </NativeRouter>
     )
   }

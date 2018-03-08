@@ -6,7 +6,8 @@ import {
   StatusBar,
   FlatList,
   ScrollView,
-  RefreshControl
+  RefreshControl,
+  TouchableHighlight
 } from 'react-native'
 
 import Panel from '../src/components/Panel'
@@ -22,7 +23,7 @@ class Home extends Component {
     refreshing: false
   }
   componentWillMount () {
-    this.fetchData()
+    // this.fetchData()
   }
   fetchData () {
     this.setState({refreshing: true})
@@ -55,12 +56,18 @@ class Home extends Component {
           backgroundColor="#12686b"
         ></StatusBar>
         <View style={styles.search}>
-          <View style={styles.searchBox}>
+          <TouchableHighlight
+            underlayColor="#12686b"
+            onPress={() => {
+              this.props.history.push('/search')
+            }}
+            style={styles.searchBox} 
+          >
             <Text style={{
               color: '#fff',
               fontSize: 12
             }}>请输入搜索关键词</Text>
-          </View>
+          </TouchableHighlight>
         </View>
         
         <View style={styles.list}>
