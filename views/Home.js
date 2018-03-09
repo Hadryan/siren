@@ -17,6 +17,9 @@ import Album from '../src/components/Album'
 import Api from '../src/lib/api'
 
 class Home extends Component {
+  static navigatorStyle = {
+    navBarHidden: true
+  }
   state = {
     topList: [],
     newAlbums: [],
@@ -59,7 +62,10 @@ class Home extends Component {
           <TouchableHighlight
             underlayColor="#12686b"
             onPress={() => {
-              this.props.history.push('/search')
+              this.props.navigator.push({
+                screen: 'crnaproject.Search',
+                title: 'Pushed Screen'
+              });
             }}
             style={styles.searchBox} 
           >

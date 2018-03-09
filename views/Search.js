@@ -4,16 +4,26 @@ import {
   Text,
   TextInput,
   StyleSheet,
+  StatusBar,
   TouchableHighlight
 } from 'react-native'
 import Icon from '../src/lib/icon'
 
 class Search extends Component {
+  static navigatorStyle = {
+    navBarHidden: true
+  }
   render () {
     return (
       <View style={{ 
         flex: 1
       }}>
+        <StatusBar
+          barStyle="dark-content"
+          // translucent
+          backgroundColor="#12686b"
+        ></StatusBar>
+
         <View style={styles.search}>
           <View style={styles.searchBox}>
             <Icon
@@ -23,6 +33,7 @@ class Search extends Component {
             <TextInput
               style={styles.input}
               placeholder="请输入搜索关键词"
+              autoFocus
             ></TextInput>
           </View>
           <TouchableHighlight
