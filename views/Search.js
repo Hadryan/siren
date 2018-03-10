@@ -5,13 +5,28 @@ import {
   TextInput,
   StyleSheet,
   StatusBar,
-  TouchableHighlight
+  TouchableHighlight,
+  Button,
+  Animated
 } from 'react-native'
 import Icon from '../src/lib/icon'
 
 class Search extends Component {
   static navigatorStyle = {
     navBarHidden: true
+  }
+  state = {
+    anis: Array.from({ length: 4}).map(() => {
+      return new Animated.Value(10)
+    })
+  }
+  componentDidMount() {
+    Animated.stagger(200, this.state.anis.map((anis) => {
+      return Animated.timing(anis, {
+        toValue: 0,
+        useNativeDriver: true
+      })
+    })).start()
   }
   render () {
     return (
@@ -48,9 +63,17 @@ class Search extends Component {
             
             {
               ['田馥甄','五月天','Taylor Swift', 'Nicki Miniaj'].map(
-                (item, index) => <View key={index} style={styles.historyItem}>
+                (item, index) => <Animated.View key={index} style={[styles.historyItem, {
+                  transform: [{
+                    translateY: this.state.anis[index]
+                  }],
+                  opacity: this.state.anis[index].interpolate({
+                    inputRange: [0, 10],
+                    outputRange: [1, 0]
+                  })
+                }]}>
                   <Text style={styles.historyItemText}>{item}</Text>
-                </View>
+                </Animated.View>
               )
             }
           </View>
