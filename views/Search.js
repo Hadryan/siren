@@ -31,7 +31,8 @@ class Search extends Component {
   render () {
     return (
       <View style={{ 
-        flex: 1
+        flex: 1,
+        backgroundColor: '#fff'
       }}>
         <StatusBar
           barStyle="dark-content"
@@ -49,6 +50,7 @@ class Search extends Component {
               style={styles.input}
               placeholder="请输入搜索关键词"
               autoFocus
+              underlineColorAndroid='rgba(0,0,0,0)'
             ></TextInput>
           </View>
           <TouchableHighlight
@@ -99,7 +101,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     flexDirection: 'row',
     alignItems: 'center',
-    height: 30
+    height: 40
   },
   searchIcon: {
     marginLeft: 5,
