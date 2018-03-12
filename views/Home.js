@@ -55,8 +55,8 @@ class Home extends Component {
       <View style={styles.container}>
         <StatusBar
           barStyle="light-content"
-          // translucent
-          backgroundColor="#12686b"
+          translucent
+          backgroundColor="rgba(0,0,0,0.4)"
         ></StatusBar>
         <View style={styles.search}>
           <TouchableHighlight

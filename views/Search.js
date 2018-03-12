@@ -36,8 +36,8 @@ class Search extends Component {
       }}>
         <StatusBar
           barStyle="dark-content"
-          // translucent
-          backgroundColor="#12686b"
+          translucent
+          backgroundColor="#fff"
         ></StatusBar>
 
         <View style={styles.search}>
