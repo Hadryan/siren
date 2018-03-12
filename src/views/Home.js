@@ -13,6 +13,7 @@ import {
 import Panel from '../components/Panel'
 import PlayList from '../components/PlayList'
 import Album from '../components/Album'
+import PlayController from '../components/PlayController'
 
 import Api from '../lib/api'
 
@@ -120,6 +121,12 @@ class Home extends Component {
               ></FlatList>
             </Panel>
           </ScrollView>
+        </View>
+        
+        <View style={{
+          backgroundColor: '#FBFBFB'
+        }}>
+          <PlayController></PlayController>
         </View>
       </View>
     )
