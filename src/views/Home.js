@@ -10,11 +10,11 @@ import {
   TouchableHighlight
 } from 'react-native'
 
-import Panel from '../src/components/Panel'
-import PlayList from '../src/components/PlayList'
-import Album from '../src/components/Album'
+import Panel from '../components/Panel'
+import PlayList from '../components/PlayList'
+import Album from '../components/Album'
 
-import Api from '../src/lib/api'
+import Api from '../lib/api'
 
 class Home extends Component {
   static navigatorStyle = {

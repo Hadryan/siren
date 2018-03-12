@@ -9,7 +9,7 @@ import {
   Button,
   Animated
 } from 'react-native'
-import Icon from '../src/lib/icon'
+import Icon from '../lib/icon'
 
 class Search extends Component {
   static navigatorStyle = {

@@ -1,5 +1,5 @@
-import Home from './views/Home'
-import Search from './views/Search'
+import Home from './src/views/Home'
+import Search from './src/views/Search'
 
 import { Navigation } from 'react-native-navigation';
 
