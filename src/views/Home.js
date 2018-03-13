@@ -123,11 +123,19 @@ class Home extends Component {
           </ScrollView>
         </View>
         
-        <View style={{
-          backgroundColor: '#FBFBFB'
-        }}>
-          <PlayController></PlayController>
-        </View>
+        <TouchableHighlight
+          onPress={() => {
+            this.props.navigator.push({
+              screen: 'crnaproject.Play'
+            });
+          }}
+        >
+          <View style={{
+            backgroundColor: '#FBFBFB'
+          }}>
+            <PlayController></PlayController>
+          </View>
+        </TouchableHighlight>
       </View>
     )
   }
