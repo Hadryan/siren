@@ -73,7 +73,7 @@ class Search extends Component {
           datas: {
             ...this.state.datas,
             type: 1,
-            list: unique(this.state.datas.list.concat(data.result.songs)),
+            list: unique(this.state.datas.list.concat(data.result.songs), 'id'),
             loading: false,
             total: data.result.songCount,
             page: this.state.datas.page + 1
