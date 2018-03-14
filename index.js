@@ -11,6 +11,6 @@ Navigation.registerComponent('crnaproject.Play', () => Play)
 Navigation.startSingleScreenApp({
   screen: {
     label: 'Home',
-    screen: 'crnaproject.Home'
+    screen: 'crnaproject.Search'
   }
 })

@@ -1,6 +1,21 @@
 import axios from 'axios'
 
 /**
+ * covert data to x-www-form-urlencoded
+ * @param {Object} data 
+ */
+function ConvertData (data) {
+  const result = []
+  for (let key in data) {
+    result.push(
+      `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`
+    )
+  }
+
+  return result.join('&')
+}
+
+/**
  * 请求方法封装
  * @param {String} url 
  * @param {Object} options 
@@ -35,5 +50,25 @@ export default {
   },
   newAlbums (offset = 0, limit = 50) {
     return request(`http://music.163.com/api/album/new?area=ALL&offset=${offset}&total=true&limit=${limit}`)
+  },
+  /**
+   * 搜索接口
+   * @param {String} s 搜索关键词
+   * @param {Number} type 搜索类型 1-单曲 100-歌手 10-专辑 1000-歌单 1002-用户 
+   * @param {Number} offset 偏移值 默认：0
+   * @param {Bool} total ?
+   * @param {Number} limit 数量限制
+   */
+  search (s, type = 1, offset = 0, total = true, limit = 20) {
+    return request('http://music.163.com/api/search/get', {
+      method: 'POST',
+      body: ConvertData({
+        s,
+        type,
+        offset,
+        total,
+        limit
+      })
+    })
   }
 }

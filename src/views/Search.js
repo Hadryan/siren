@@ -6,10 +6,19 @@ import {
   StyleSheet,
   StatusBar,
   TouchableHighlight,
+  TouchableOpacity,
   Button,
-  Animated
+  Animated,
+  ScrollView,
+  FlatList,
+  ActivityIndicator,
+  Alert
 } from 'react-native'
 import Icon from '../lib/icon'
+import SongItem from '../components/SongItem'
+
+import api from '../lib/api'
+import { unique } from '../lib/tools'
 
 class Search extends Component {
   static navigatorStyle = {
@@ -18,7 +27,16 @@ class Search extends Component {
   state = {
     anis: Array.from({ length: 4}).map(() => {
       return new Animated.Value(10)
-    })
+    }),
+    search: 0,
+    searchKey: '',
+    datas: {
+      type: 1, // 对应结果类型
+      list: [], // 数据存放位置
+      loading: false, // 加载状态
+      total: 1, // 总数量
+      page: 0 // 页数
+    }
   }
   componentDidMount() {
     Animated.stagger(200, this.state.anis.map((anis) => {
@@ -28,7 +46,118 @@ class Search extends Component {
       })
     })).start()
   }
+  fetchData () {
+    if (this.state.searchKey.trim() === '') {
+      Alert.alert('提示', '请输入正确的关键词', [
+        {
+          text: '好'
+        }
+      ])
+      return
+    }
+    if (this.state.datas.loading) return
+    if (this.state.datas.list.length >= this.state.datas.total) {
+      return
+    }
+    this.setState({
+      ...this.state,
+      datas: {
+        ...this.state.datas,
+        loading: true
+      }
+    })
+    api.search(this.state.searchKey, 1, this.state.datas.page * 20, true, 20)
+      .then((data) => {
+        data.code === 200 && this.setState({
+          ...this.state,
+          datas: {
+            ...this.state.datas,
+            type: 1,
+            list: unique(this.state.datas.list.concat(data.result.songs)),
+            loading: false,
+            total: data.result.songCount,
+            page: this.state.datas.page + 1
+          }
+        })
+      })
+  }
+  toSearch () {
+    this.setState({
+      search: 1,
+      datas: {
+        type: 1, // 对应结果类型
+        list: [], // 数据存放位置
+        loading: false, // 加载状态
+        total: 1, // 总数量
+        page: 0 // 页数
+      }
+    },
+      this.fetchData
+    )
+  }
   render () {
+
+    const SearchHistory = (
+      <View style={styles.history}>
+        <View style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'flex-end'
+        }}>
+          <Text style={styles.title}>搜索历史</Text>
+          <Text style={{
+            color: '#B3B3B3'
+          }}>清除记录</Text>
+        </View>
+        <View style={styles.historys}>
+          {
+            ['田馥甄','五月天','Taylor Swift', 'Nicki Miniaj'].map(
+              (item, index) => <Animated.View key={index} style={[styles.historyItem, {
+                transform: [{
+                  translateY: this.state.anis[index]
+                }],
+                opacity: this.state.anis[index].interpolate({
+                  inputRange: [0, 10],
+                  outputRange: [1, 0]
+                })
+              }]}>
+                <Text style={styles.historyItemText}>{item}</Text>
+              </Animated.View>
+            )
+          }
+        </View>
+      </View>
+    )
+
+    const SearchResult = (
+      <View style={styles.result}>
+        <Text style={styles.title}>搜索结果</Text>
+        
+        <View style={{marginTop: 15, flexGrow: 1}}>
+          <FlatList
+            style={{marginBottom: 20}}
+            data={this.state.datas.list}
+            renderItem={({item}) => <View style={{marginBottom: 10}}>
+              <SongItem data={item}></SongItem>
+            </View>}
+            keyExtractor={(item) => item.id}
+            ListFooterComponent={() => 
+              <View style={{marginTop: 10}}>
+                {
+                  this.state.datas.loading ?
+                  <ActivityIndicator></ActivityIndicator> :
+                  <Text style={{textAlign: 'center'}}>~</Text>
+                }
+              </View>
+            }
+            onEndReached={() => {
+              this.fetchData()
+            }}
+          ></FlatList>
+        </View>
+      </View>
+    )
+
     return (
       <View style={{ 
         flex: 1,
@@ -51,38 +180,41 @@ class Search extends Component {
               placeholder="请输入搜索关键词"
               autoFocus
               underlineColorAndroid='rgba(0,0,0,0)'
+              returnKeyType='search'
+              value={this.state.searchKey}
+              onChangeText={(text) => this.setState({ searchKey: text })}
+              onSubmitEditing={() => this.toSearch()}
             ></TextInput>
           </View>
-          <TouchableHighlight
+          <TouchableOpacity
             style={styles.searchBtn}
+            onPress={() => {
+              this.toSearch()
+            }}
           >
             <Text style={styles.searchText}>搜索</Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </View>
-        <View style={styles.history}>
-          <Text style={styles.title}>搜索历史</Text>
-          <View style={styles.historys}>
-            
-            {
-              ['田馥甄','五月天','Taylor Swift', 'Nicki Miniaj'].map(
-                (item, index) => <Animated.View key={index} style={[styles.historyItem, {
-                  transform: [{
-                    translateY: this.state.anis[index]
-                  }],
-                  opacity: this.state.anis[index].interpolate({
-                    inputRange: [0, 10],
-                    outputRange: [1, 0]
-                  })
-                }]}>
-                  <Text style={styles.historyItemText}>{item}</Text>
-                </Animated.View>
-              )
-            }
-          </View>
+        <View style={{
+          flexGrow: 1
+        }}>
+          {
+            this.state.search === 1
+            ? SearchResult
+            : SearchHistory
+          }
         </View>
       </View>
     )
   }
+}
+
+const baseContainer = {
+  paddingLeft: 20,
+  paddingRight: 20,
+  position: 'absolute',
+  width: '100%',
+  height: '100%',
 }
 
 const styles = StyleSheet.create({
@@ -125,8 +257,7 @@ const styles = StyleSheet.create({
     color: '#626262'
   },
   history: {
-    paddingLeft: 20,
-    paddingRight: 20
+    ...baseContainer
   },
   historys: {
     flexDirection: 'row',
@@ -144,6 +275,10 @@ const styles = StyleSheet.create({
   },
   historyItemText: {
     color: '#929292'
+  },
+  result: {
+    ...baseContainer,
+    paddingBottom: 20
   }
 })
 
