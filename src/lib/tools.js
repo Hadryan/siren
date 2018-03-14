@@ -8,7 +8,7 @@ export const unique = (arr, key) => {
   const resultArr = []
 
   arr.forEach((item) => {
-    if (item[key]) {
+    if (bucket[item[key]]) {
       return
     }
 

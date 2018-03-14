@@ -12,7 +12,8 @@ import {
   ScrollView,
   FlatList,
   ActivityIndicator,
-  Alert
+  Alert,
+  AsyncStorage
 } from 'react-native'
 import Icon from '../lib/icon'
 import SongItem from '../components/SongItem'
@@ -25,11 +26,10 @@ class Search extends Component {
     navBarHidden: true
   }
   state = {
-    anis: Array.from({ length: 4}).map(() => {
-      return new Animated.Value(10)
-    }),
+    anis: [],
     search: 0,
     searchKey: '',
+    history: [],
     datas: {
       type: 1, // 对应结果类型
       list: [], // 数据存放位置
@@ -39,12 +39,17 @@ class Search extends Component {
     }
   }
   componentDidMount() {
-    Animated.stagger(200, this.state.anis.map((anis) => {
-      return Animated.timing(anis, {
-        toValue: 0,
-        useNativeDriver: true
-      })
-    })).start()
+    this.updateHistory()
+  }
+  componentDidUpdate () {
+    if (this.state.search === 0) {
+      Animated.stagger(200, this.state.anis.map((anis) => {
+        return Animated.timing(anis, {
+          toValue: 0,
+          useNativeDriver: true
+        })
+      })).start()
+    }
   }
   fetchData () {
     if (this.state.searchKey.trim() === '') {
@@ -59,6 +64,9 @@ class Search extends Component {
     if (this.state.datas.list.length >= this.state.datas.total) {
       return
     }
+
+    this.addHistory(this.state.searchKey)
+
     this.setState({
       ...this.state,
       datas: {
@@ -95,8 +103,48 @@ class Search extends Component {
       this.fetchData
     )
   }
+  addHistory (name) {
+    // update search history
+    AsyncStorage.getItem('searchHistory', (error, result) => {
+      if (error) return
+      const arr = new Set(JSON.parse(result))
+      
+      arr.add(name)
+      
+      AsyncStorage.setItem('searchHistory', JSON.stringify([...arr]), () => this.updateHistory())
+    })
+  }
+  updateHistory (callback = () => {}) {
+    AsyncStorage.getItem('searchHistory', (error, result) => {
+      if (error) return
+      let arr = JSON.parse(result) || []
+      this.setState({
+        history: arr,
+        anis: Array.from({ length: arr.length }).map(() => {
+          return new Animated.Value(10)
+        })
+      }, callback)
+    })
+  }
+  clearHistoty () {
+    AsyncStorage.setItem('searchHistory', '[]', (error) => {
+      if (error) return
+      Animated.stagger(200, this.state.anis.map((anis) => {
+        return Animated.timing(anis, {
+          toValue: 10,
+          useNativeDriver: true
+        })
+      })).start(() => {
+        this.setState({
+          history: [],
+          anis: []
+        })
+      })
+    })
+  }
   render () {
-
+    console.log(this.state.history)
+    
     const SearchHistory = (
       <View style={styles.history}>
         <View style={{
@@ -105,13 +153,16 @@ class Search extends Component {
           alignItems: 'flex-end'
         }}>
           <Text style={styles.title}>搜索历史</Text>
-          <Text style={{
-            color: '#B3B3B3'
-          }}>清除记录</Text>
+          
+          <TouchableOpacity onPress={() => this.clearHistoty()}>
+            <Text style={{
+              color: '#B3B3B3'
+            }}>清除记录</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.historys}>
           {
-            ['田馥甄','五月天','Taylor Swift', 'Nicki Miniaj'].map(
+            this.state.history.map(
               (item, index) => <Animated.View key={index} style={[styles.historyItem, {
                 transform: [{
                   translateY: this.state.anis[index]
@@ -182,7 +233,12 @@ class Search extends Component {
               underlineColorAndroid='rgba(0,0,0,0)'
               returnKeyType='search'
               value={this.state.searchKey}
-              onChangeText={(text) => this.setState({ searchKey: text })}
+              onChangeText={(text) => {
+                this.setState({
+                  searchKey: text,
+                  search: text.trim().length === 0 ? 0 : this.state.search
+                })}
+              }
               onSubmitEditing={() => this.toSearch()}
             ></TextInput>
           </View>
