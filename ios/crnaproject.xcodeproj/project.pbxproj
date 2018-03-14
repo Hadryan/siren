@@ -42,6 +42,7 @@
 		BB4C5AA52056566D000BAD67 /* libART.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB4C5A7920565650000BAD67 /* libART.a */; };
 		BB7D112D2050D32D00023103 /* iconfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BB7D112C2050D32D00023103 /* iconfont.ttf */; };
 		BB7D11B22051387100023103 /* libReactNativeNavigation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB7D11AF205137A300023103 /* libReactNativeNavigation.a */; };
+		C64DEE9E848B435F897D087D /* libRNSound.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3860811197404878995C0A29 /* libRNSound.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -276,6 +277,13 @@
 			remoteGlobalIDString = 323A12871E5F266B004975B8;
 			remoteInfo = "ART-tvOS";
 		};
+		BB4C5AE620592686000BAD67 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 80F1444BA6BE4319AD679762 /* RNSound.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 19825A1E1BD4A89800EE0337;
+			remoteInfo = RNSound;
+		};
 		BB55D0DD2050CFA7003D0485 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A76FB38CAB64F678C7BAEF7 /* FastImage.xcodeproj */;
@@ -386,10 +394,12 @@
 		2D02E47B1E0B4A5D006451C7 /* crnaproject-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "crnaproject-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* crnaproject-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "crnaproject-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3860811197404878995C0A29 /* libRNSound.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNSound.a; sourceTree = "<group>"; };
 		52176A2CA74143FEB81A1791 /* libFastImage.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libFastImage.a; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		6965A5364FB04CCEAA76F46C /* libRNBlur.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNBlur.a; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
+		80F1444BA6BE4319AD679762 /* RNSound.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSound.xcodeproj; path = "../node_modules/react-native-sound/RNSound.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		BB4C5A7320565650000BAD67 /* ART.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ART.xcodeproj; path = "../node_modules/react-native/Libraries/ART/ART.xcodeproj"; sourceTree = "<group>"; };
@@ -428,6 +438,7 @@
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				0A4F7A8C3B9446CFA5F13554 /* libRNBlur.a in Frameworks */,
 				839BE89B3F634A61A0887A28 /* libFastImage.a in Frameworks */,
+				C64DEE9E848B435F897D087D /* libRNSound.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -617,6 +628,7 @@
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				EBC6EE4A7FF543E1A0BCC2BE /* RNBlur.xcodeproj */,
 				2A76FB38CAB64F678C7BAEF7 /* FastImage.xcodeproj */,
+				80F1444BA6BE4319AD679762 /* RNSound.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -675,6 +687,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		BB4C5AE320592686000BAD67 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BB4C5AE720592686000BAD67 /* libRNSound.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		BB55D0DA2050CFA7003D0485 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -704,6 +724,7 @@
 			children = (
 				6965A5364FB04CCEAA76F46C /* libRNBlur.a */,
 				52176A2CA74143FEB81A1791 /* libFastImage.a */,
+				3860811197404878995C0A29 /* libRNSound.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -891,6 +912,10 @@
 				{
 					ProductGroup = BBA96AA8204D497A006FBF4B /* Products */;
 					ProjectRef = EBC6EE4A7FF543E1A0BCC2BE /* RNBlur.xcodeproj */;
+				},
+				{
+					ProductGroup = BB4C5AE320592686000BAD67 /* Products */;
+					ProjectRef = 80F1444BA6BE4319AD679762 /* RNSound.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -1121,6 +1146,13 @@
 			remoteRef = BB4C5A7A20565650000BAD67 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		BB4C5AE720592686000BAD67 /* libRNSound.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNSound.a;
+			remoteRef = BB4C5AE620592686000BAD67 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		BB55D0DE2050CFA7003D0485 /* libFastImage.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1348,12 +1380,14 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-blur/ios",
 					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage/**",
+					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 				);
 				INFOPLIST_FILE = crnaprojectTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
@@ -1375,12 +1409,14 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-blur/ios",
 					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage/**",
+					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 				);
 				INFOPLIST_FILE = crnaprojectTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
@@ -1403,6 +1439,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-blur/ios",
 					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage/**",
+					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 				);
 				INFOPLIST_FILE = crnaproject/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1425,6 +1462,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-blur/ios",
 					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage/**",
+					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 				);
 				INFOPLIST_FILE = crnaproject/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1454,11 +1492,13 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-blur/ios",
 					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage/**",
+					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 				);
 				INFOPLIST_FILE = "crnaproject-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
@@ -1490,11 +1530,13 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-blur/ios",
 					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage/**",
+					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 				);
 				INFOPLIST_FILE = "crnaproject-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
@@ -1527,6 +1569,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.crnaproject-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1551,6 +1594,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
