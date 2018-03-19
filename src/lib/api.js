@@ -78,9 +78,6 @@ export default {
    * @param {Number} id 歌曲id
    */
   getDetailById (id) {
-    var data = { params: 'HOnF5BSbCQ4xhZ/U/0mZnhx4iSOiAfHF6D8X4yXuC8xRaZoh7tH/0hVwD3u9tpjqgch+tR3K+sP0c3gysKoRUicT0P+ovbc9wGXr3PVwpbI=',
-    encSecKey: '44f3cdc674d610ac2c1dacd29c1b70be91cea7e3f1830d934c5b43894e71940d930bbeb1c8499e275e6e1321785498d96cad6a0c3f15354687e2d18e0b648c959c7e9be0fcbfedeb28c58f1e60f941dda915c586d9629a736d006ded8b5cfc53ae904bf874202ace10bb0b7dfd1fb91e5994fbb79614709895e6017adc0f9c21' }
-
     return encrypt(JSON.stringify({
       ids: [id],
       br: 320000,

@@ -11,8 +11,8 @@ class SoundApi {
       throw new Error('Cannot instantiate directly.');
   }
   setURL (url) {
-    return Promise((resolve, reject) => {
-      this.player = new Sound(url, (error) => {
+    return new Promise((resolve, reject) => {
+      this.player = new Sound(url, '', (error) => {
         if (error) {
           console.log(error)
           reject(error)
@@ -23,7 +23,17 @@ class SoundApi {
     })
   }
   play () {
-    this.player.play()
+    console.log('play')
+    this.player.play((success) => {
+      if (success) {
+        console.log('successfully finished playing');
+      } else {
+        console.log('playback failed due to audio decoding errors');
+        // reset the player to its uninitialized state (android only)
+        // this is the only option to recover after an error occured and use the player again
+        this.player.reset();
+      }
+    })
   }
   static get instance () {
     if (!this[_singleton])

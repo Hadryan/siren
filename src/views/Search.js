@@ -146,8 +146,6 @@ class Search extends Component {
     })
   }
   render () {
-    console.log(this.state.history)
-    
     const SearchHistory = (
       <View style={styles.history}>
         <View style={{
@@ -204,6 +202,8 @@ class Search extends Component {
                 api.getDetailById(item.id)
                   .then((data) => {
                     console.log(data)
+                    sound.setURL(data.data[0].url)
+                      .then(() => sound.play())
                   })
               }}>
                 <View style={{marginBottom: 10}}>
