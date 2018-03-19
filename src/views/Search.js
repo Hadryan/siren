@@ -18,8 +18,11 @@ import {
 import Icon from '../lib/icon'
 import SongItem from '../components/SongItem'
 
+import Sound from '../lib/sound'
 import api from '../lib/api'
 import { unique } from '../lib/tools'
+
+const sound = Sound.instance
 
 class Search extends Component {
   static navigatorStyle = {
@@ -172,7 +175,15 @@ class Search extends Component {
                   outputRange: [1, 0]
                 })
               }]}>
-                <Text style={styles.historyItemText}>{item}</Text>
+                <TouchableOpacity onPress={() => {
+                  this.setState({
+                    searchKey: item
+                  }, () => {
+                    this.toSearch()
+                  })
+                }}>
+                  <Text style={styles.historyItemText}>{item}</Text>
+                </TouchableOpacity>
               </Animated.View>
             )
           }
@@ -188,9 +199,18 @@ class Search extends Component {
           <FlatList
             style={{marginBottom: 20}}
             data={this.state.datas.list}
-            renderItem={({item}) => <View style={{marginBottom: 10}}>
-              <SongItem data={item}></SongItem>
-            </View>}
+            renderItem={({item}) =>
+              <TouchableOpacity onPress={() => {
+                api.getDetailById(item.id)
+                  .then((data) => {
+                    console.log(data)
+                  })
+              }}>
+                <View style={{marginBottom: 10}}>
+                  <SongItem data={item}></SongItem>
+                </View>
+              </TouchableOpacity>
+            }
             keyExtractor={(item) => item.id}
             ListFooterComponent={() => 
               <View style={{marginTop: 10}}>

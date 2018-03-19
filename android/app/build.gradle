@@ -140,6 +140,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-aes-kit')
     compile project(':react-native-sound')
     compile project(':react-native-fast-image')
     compile project(':react-native-blur')
