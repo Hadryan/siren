@@ -15,6 +15,7 @@ import {
   Alert,
   AsyncStorage
 } from 'react-native'
+import { Navigation } from 'react-native-navigation'
 import Icon from '../lib/icon'
 import SongItem from '../components/SongItem'
 
@@ -201,9 +202,28 @@ class Search extends Component {
               <TouchableOpacity onPress={() => {
                 api.getDetailById(item.id)
                   .then((data) => {
-                    console.log(data)
-                    sound.setURL(data.data[0].url)
-                      .then(() => sound.play())
+                    let url = data.data[0].url
+                    
+                    if (!url) {
+                      this.props.navigator.showLightBox({
+                        screen: 'crnaproject.Notice',
+                        passProps: {
+                          message: '👋 暂时没有歌曲资源'
+                        },
+                        style: {
+                          backgroundColor: 'rgba(255,255,255,.9)',
+                          tapBackgroundToDismiss: true
+                        }
+                      })
+                    } else {
+                      sound.setURL(url)
+                        .then(() => {
+                          sound.play()
+                          this.props.navigator.push({
+                            screen: 'crnaproject.Play'
+                          })
+                        })
+                    }
                   })
               }}>
                 <View style={{marginBottom: 10}}>
