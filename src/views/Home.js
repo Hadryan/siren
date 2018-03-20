@@ -15,19 +15,27 @@ import PlayList from '../components/PlayList'
 import Album from '../components/Album'
 import PlayController from '../components/PlayController'
 
+import Sound from '../lib/sound'
 import Api from '../lib/api'
 
+const sound = Sound.instance
+
 class Home extends Component {
+  constructor (props) {
+    super(props)
+    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this))
+  }
   static navigatorStyle = {
     navBarHidden: true
   }
   state = {
     topList: [],
     newAlbums: [],
-    refreshing: false
+    refreshing: false,
+    playController: false
   }
   componentWillMount () {
-    // this.fetchData()
+    this.fetchData()
   }
   fetchData () {
     this.setState({refreshing: true})
@@ -50,6 +58,13 @@ class Home extends Component {
         refreshing: false
       })
     })
+  }
+  onNavigatorEvent (event) {
+    if (event.id === 'didAppear') {
+      this.setState({
+        playController: !!sound.player
+      })
+    }
   }
   render () {
     return (
@@ -123,19 +138,24 @@ class Home extends Component {
           </ScrollView>
         </View>
         
-        <TouchableHighlight
-          onPress={() => {
-            this.props.navigator.push({
-              screen: 'crnaproject.Play'
-            });
-          }}
-        >
-          <View style={{
-            backgroundColor: '#FBFBFB'
-          }}>
-            <PlayController></PlayController>
-          </View>
-        </TouchableHighlight>
+        {
+          this.state.playController
+          ? <TouchableHighlight
+            onPress={() => {
+              this.props.navigator.push({
+                screen: 'crnaproject.Play'
+              })
+            }}
+          >
+            <View style={{
+              backgroundColor: '#FBFBFB'
+            }}>
+              <PlayController></PlayController>
+            </View>
+          </TouchableHighlight>
+          : <View></View>
+        }
+        
       </View>
     )
   }

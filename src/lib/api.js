@@ -78,15 +78,32 @@ export default {
    * @param {Number} id 歌曲id
    */
   getDetailById (id) {
-    return encrypt(JSON.stringify({
-      ids: [id],
-      br: 320000,
-      csrf_token: ''
-    })).then(data => {
-      return request(`http://music.163.com/weapi/song/enhance/player/url?csrf_token=`, {
-        method: 'POST',
-        body: ConvertData(data)
+    return Promise.all([
+      encrypt(JSON.stringify({
+        ids: [id],
+        br: 320000,
+        csrf_token: ''
+      })).then(data => {
+        return request(`http://music.163.com/weapi/song/enhance/player/url?csrf_token=`, {
+          method: 'POST',
+          body: ConvertData(data)
+        })
+      }),
+      encrypt(JSON.stringify({
+        ids: JSON.stringify([id]),
+        c: JSON.stringify([{id}]),
+        csrf_token: ''
+      })).then(data => {
+        return request(`http://music.163.com/weapi/v3/song/detail?csrf_token=`, {
+          method: 'POST',
+          body: ConvertData(data)
+        })
       })
+    ]).then((result) => {
+      return {
+        ...result[0].data[0],
+        cover: result[1].songs[0].al.picUrl
+      }
     })
   }
 }

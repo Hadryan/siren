@@ -21,6 +21,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "big-integer": "^1.6.27",
+    "moment": "^2.21.0",
     "react": "16.2.0",
     "react-native": "0.52.0",
     "react-native-aes-kit": "^1.0.2",

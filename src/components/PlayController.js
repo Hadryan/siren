@@ -8,14 +8,54 @@ import {
 import * as Progress from 'react-native-progress'
 import Icon from '../lib/icon'
 
+import Sound from '../lib/sound'
+
+const sound = Sound.instance
+
 class PlayController extends Component {
+  state = {
+    title: '标题',
+    author: ['艺术家'],
+    cover: 'http://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg',
+    time: {
+      duration: -1,
+      current: 0
+    },
+    playing: false,
+    loaded: false
+  }
+  componentDidMount () {
+    this.setState({
+      title: sound.title,
+      author: sound.author,
+      cover: sound.cover
+    })
+
+    // um...🤕 WIP[!]
+    if (sound.player) {
+      this.updateUI()
+      interval = setInterval(() => { this.updateUI() }, 1000)
+    }
+  }
+  updateUI () {
+    sound.player.getCurrentTime((seconds, isPlaying) => {
+      this.setState({
+        time: {
+          duration: sound.player.getDuration(),
+          current: seconds
+        },
+        playing: isPlaying,
+        loaded: sound.player.isLoaded()
+      })
+    })
+  }
   render () {
     return (
       <View style={styles.container}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.cover}>
             <Progress.Circle
-              progress={0.4}
+              progress={this.state.time.current/this.state.time.duration}
               borderWidth={0}
               thickness={5}
               color='#11999E'
@@ -27,7 +67,7 @@ class PlayController extends Component {
               size={50} />
             <Image
               source={{
-                uri: 'http://p0j938qnq.bkt.clouddn.com/1125020005339bd9a0o.jpg'
+                uri: this.state.cover
               }}
               style={{
                 width: 50,
@@ -39,8 +79,8 @@ class PlayController extends Component {
             ></Image>
           </View>
           <View style={{marginLeft: 10}}>
-            <Text style={styles.name}>色は匂へど散りぬるを</Text>
-            <Text style={styles.singer}>幽閉サテライト</Text>
+            <Text style={styles.name}>{this.state.title}</Text>
+            <Text style={styles.singer}>{this.state.author}</Text>
           </View>
         </View>
         <View style={{flexDirection: 'row'}}>

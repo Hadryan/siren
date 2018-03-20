@@ -202,8 +202,8 @@ class Search extends Component {
               <TouchableOpacity onPress={() => {
                 api.getDetailById(item.id)
                   .then((data) => {
-                    let url = data.data[0].url
-                    
+                    let url = data.url
+                    console.log(item, data)
                     if (!url) {
                       this.props.navigator.showLightBox({
                         screen: 'crnaproject.Notice',
@@ -216,7 +216,8 @@ class Search extends Component {
                         }
                       })
                     } else {
-                      sound.setURL(url)
+                      
+                      sound.setBaseInfo(url, item.name, item.artists.map(i => i.name), data.cover)
                         .then(() => {
                           sound.play()
                           this.props.navigator.push({

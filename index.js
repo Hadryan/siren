@@ -13,6 +13,6 @@ Navigation.registerComponent('crnaproject.Notice', () => Notice)
 Navigation.startSingleScreenApp({
   screen: {
     label: 'Home',
-    screen: 'crnaproject.Search'
+    screen: 'crnaproject.Home'
   }
 })

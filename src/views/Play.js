@@ -8,17 +8,88 @@ import {
   StyleSheet,
   Image,
   Dimensions,
-  StatusBar
+  StatusBar,
+  ActivityIndicator
 } from 'react-native'
 import Slider from 'react-native-slider'
+import moment from 'moment'
 
+import Sound from '../lib/sound'
 import Icon from '../lib/icon'
+
+const sound = Sound.instance
+let interval
+
+class ProgressBar extends Component {
+  touching = false
+  shouldComponentUpdate () {
+    return !this.touching
+  }
+  render () {
+    return <Slider
+      minimumTrackTintColor='#1fb28a'
+      maximumTrackTintColor='#d3d3d3'
+      thumbTintColor='#1a9274'
+      value={this.props.value}
+      onSlidingStart={() => {
+        this.touching = true
+      }}
+      onSlidingComplete={(value) => {
+        this.touching = false
+        this.props.onSlidingComplete && this.props.onSlidingComplete(value)
+      }}
+    ></Slider>
+  }
+}
 
 class Play extends Component {
   static navigatorStyle = {
     navBarHidden: true
   }
+  state = {
+    title: '标题',
+    author: ['艺术家'],
+    cover: 'http://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg',
+    time: {
+      duration: -1,
+      current: 0
+    },
+    playing: false,
+    loaded: false
+  }
+  componentDidMount () {
+    this.setState({
+      title: sound.title,
+      author: sound.author,
+      cover: sound.cover
+    })
+
+    // um...🤕 WIP[!]
+    this.updateUI()
+    interval = setInterval(() => { this.updateUI() }, 1000)
+  }
+  updateUI () {
+    sound.player.getCurrentTime((seconds, isPlaying) => {
+      this.setState({
+        time: {
+          duration: sound.player.getDuration(),
+          current: seconds
+        },
+        playing: isPlaying,
+        loaded: sound.player.isLoaded()
+      })
+    })
+  }
+  componentWillUnmount () {
+    clearInterval(interval)
+  }
   render () {
+    const formatTime = (second) => {
+      return moment('2018-01-01 00:00:00')
+              .seconds(second)
+              .format('mm:ss')
+    }
+
     return (
       <View style={{flex: 1}}>
         <StatusBar
@@ -32,21 +103,21 @@ class Play extends Component {
             }}
             blurRadius={50}
             source={{
-              uri: 'http://p0j938qnq.bkt.clouddn.com/1125020005339bd9a0o.jpg'
+              uri: this.state.cover
             }}
           ></Image>
         </View>
         <View style={styles.container}>
           <View style={styles.info}>
-            <Text style={styles.name}>标题</Text>
-            <Text style={styles.singer}>歌手</Text>
+            <Text style={styles.name}>{this.state.title}</Text>
+            <Text style={styles.singer}>{this.state.author.join('/')}</Text>
           </View>
           <View style={styles.cover}>
             <View style={styles.coverContent}>
               <Image
                 style={styles.coverImage}
                 source={{
-                  uri: 'http://p0j938qnq.bkt.clouddn.com/1125020005339bd9a0o.jpg'
+                  uri: this.state.cover
                 }}
               ></Image>
             </View>
@@ -54,27 +125,24 @@ class Play extends Component {
           <View style={styles.controller}>
             <View style={styles.progressContent}>
               <Text
-                style={{
-                  color: '#fff'
-                }}
-              >01:23</Text>
+                style={styles.time}
+              >
+              {formatTime(this.state.time.current)}
+              </Text>
               <View style={{
                 flex: 1,
                 marginLeft: 10,
                 marginRight: 10,
                 position: 'relative'
               }}>
-                <Slider
-                  minimumTrackTintColor='#1fb28a'
-                  maximumTrackTintColor='#d3d3d3'
-                  thumbTintColor='#1a9274'
-                ></Slider>
+                <ProgressBar
+                  value={this.state.time.current/this.state.time.duration}
+                  onSlidingComplete={value => sound.player.setCurrentTime( value * this.state.time.duration )}
+                ></ProgressBar>
               </View>
               <Text
-                style={{
-                  color: '#fff'
-                }}
-              >04:40</Text>
+                style={styles.time}
+              >{formatTime(this.state.time.duration)}</Text>
             </View>
             <View style={styles.controllerContainer}>
               <View>
@@ -84,7 +152,19 @@ class Play extends Component {
                 <Icon style={styles.button} name="prev"></Icon>
               </View>
               <View>
-                <Icon style={styles.button} name="play"></Icon>
+                {
+                  this.state.loaded
+                  ? this.state.playing
+                    ? <Icon style={styles.button} onPress={() => {
+                      sound.player.pause()
+                      this.updateUI()
+                    }} name="pause"></Icon>
+                    : <Icon style={styles.button} onPress={() => {
+                      sound.player.play()
+                      this.updateUI()
+                    }} name="play"></Icon>
+                  : <ActivityIndicator></ActivityIndicator>
+                }
               </View>
               <View>
                 <Icon style={styles.button} name="next"></Icon>
@@ -172,6 +252,11 @@ const styles = StyleSheet.create({
   button: {
     fontSize: 20,
     color: '#fff'
+  },
+  time: {
+    color: '#fff',
+    width: 50,
+    textAlign: 'center'
   }
 })
 

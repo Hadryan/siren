@@ -10,8 +10,24 @@ class SoundApi {
     if (_singleton !== token)
       throw new Error('Cannot instantiate directly.');
   }
+  /**
+   * 设置音乐基本信息
+   * @param {String} url 音乐地址
+   * @param {String} title 标题
+   * @param {Array} author 艺术家
+   * @param {String} cover 封面
+   */
+  setBaseInfo (url, title = '标题', author = ['作者'], cover = '') {
+    this.title = title
+    this.author = author
+    this.cover = cover
+    return this.setURL(url)
+  }
   setURL (url) {
     return new Promise((resolve, reject) => {
+      if (this.player) {
+        this.player.release()
+      }
       this.player = new Sound(url, '', (error) => {
         if (error) {
           console.log(error)
