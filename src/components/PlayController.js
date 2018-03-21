@@ -7,45 +7,64 @@ import {
 } from 'react-native'
 import * as Progress from 'react-native-progress'
 import Icon from '../lib/icon'
+import TrackPlayer from 'react-native-track-player'
 
-import Sound from '../lib/sound'
-
-const sound = Sound.instance
+class ProgressCover extends TrackPlayer.ProgressComponent {
+  render () {
+    return (
+      <View style={styles.cover}>
+        <Progress.Circle
+          progress={this.getProgress()}
+          borderWidth={0}
+          thickness={2}
+          color='#11999E'
+          strokeCap='round'
+          style={{
+            position: 'absolute',
+            zIndex: 2
+          }}
+          size={50} />
+        <Image
+          source={{
+            uri: this.props.cover
+          }}
+          style={{
+            width: 50,
+            height: 50,
+            position: 'absolute',
+            zIndex: 1,
+            borderRadius: 25
+          }}
+        ></Image>
+      </View>
+    )
+  }
+}
 
 class PlayController extends Component {
   state = {
     title: '标题',
     author: ['艺术家'],
     cover: 'http://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg',
-    time: {
-      duration: -1,
-      current: 0
-    },
-    playing: false,
-    loaded: false
+    playing: false
   }
   componentDidMount () {
-    this.setState({
-      title: sound.title,
-      author: sound.author,
-      cover: sound.cover
-    })
-
-    // um...🤕 WIP[!]
-    if (sound.player) {
-      this.updateUI()
-      interval = setInterval(() => { this.updateUI() }, 1000)
-    }
+    this.updateUI()
   }
   updateUI () {
-    sound.player.getCurrentTime((seconds, isPlaying) => {
+    TrackPlayer.getCurrentTrack()
+      .then(TrackPlayer.getTrack)
+      .then((track) => {
+        this.setState({
+          title: track.title,
+          author: track.artist,
+          cover: track.artwork
+        })
+      })
+
+    TrackPlayer.getState().then((state) => {
       this.setState({
-        time: {
-          duration: sound.player.getDuration(),
-          current: seconds
-        },
-        playing: isPlaying,
-        loaded: sound.player.isLoaded()
+        playing: state !== 'STATE_PAUSED'
       })
     })
   }
@@ -53,31 +72,7 @@ class PlayController extends Component {
     return (
       <View style={styles.container}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <View style={styles.cover}>
-            <Progress.Circle
-              progress={this.state.time.current/this.state.time.duration}
-              borderWidth={0}
-              thickness={5}
-              color='#11999E'
-              strokeCap='round'
-              style={{
-                position: 'absolute',
-                zIndex: 2
-              }}
-              size={50} />
-            <Image
-              source={{
-                uri: this.state.cover
-              }}
-              style={{
-                width: 50,
-                height: 50,
-                position: 'absolute',
-                zIndex: 1,
-                borderRadius: 25
-              }}
-            ></Image>
-          </View>
+          <ProgressCover cover={this.state.cover}></ProgressCover>
           <View style={{marginLeft: 10}}>
             <Text style={styles.name}>{this.state.title}</Text>
             <Text style={styles.singer}>{this.state.author}</Text>
@@ -85,7 +80,17 @@ class PlayController extends Component {
         </View>
         <View style={{flexDirection: 'row'}}>
           <View>
-            <Icon style={styles.controllerIcon} name="play"></Icon>
+          {
+            this.state.playing
+              ? <Icon style={styles.controllerIcon} onPress={() => {
+                TrackPlayer.pause()
+                this.updateUI()
+              }} name="pause"></Icon>
+              : <Icon style={styles.controllerIcon} onPress={() => {
+                TrackPlayer.play()
+                this.updateUI()
+              }} name="play"></Icon>
+          }
           </View>
           <View>
             <Icon style={styles.list} name="list"></Icon>

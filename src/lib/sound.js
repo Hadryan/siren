@@ -1,12 +1,11 @@
-import Sound from 'react-native-sound'
+// import Sound from 'react-native-sound'
+import TrackPlayer from 'react-native-track-player';
 
-let _singleton = Symbol()
-
-Sound.setCategory('Playback');
+let _singleton = 'singletoken'
 
 class SoundApi {
   constructor (token) {
-    this.token = Math.random()
+    TrackPlayer.setupPlayer()
     if (_singleton !== token)
       throw new Error('Cannot instantiate directly.');
   }

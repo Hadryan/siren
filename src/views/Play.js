@@ -14,31 +14,56 @@ import {
 import Slider from 'react-native-slider'
 import moment from 'moment'
 
-import Sound from '../lib/sound'
+import TrackPlayer from 'react-native-track-player'
 import Icon from '../lib/icon'
 
-const sound = Sound.instance
 let interval
 
-class ProgressBar extends Component {
+class ProgressBar extends TrackPlayer.ProgressComponent {
   touching = false
   shouldComponentUpdate () {
     return !this.touching
   }
   render () {
-    return <Slider
-      minimumTrackTintColor='#1fb28a'
-      maximumTrackTintColor='#d3d3d3'
-      thumbTintColor='#1a9274'
-      value={this.props.value}
-      onSlidingStart={() => {
-        this.touching = true
-      }}
-      onSlidingComplete={(value) => {
-        this.touching = false
-        this.props.onSlidingComplete && this.props.onSlidingComplete(value)
-      }}
-    ></Slider>
+
+    const formatTime = (second) => {
+      return moment('2018-01-01 00:00:00')
+              .seconds(second)
+              .format('mm:ss')
+    }
+
+    return (
+      <View style={styles.progressContent}>
+        <Text
+          style={styles.time}
+        >
+        {formatTime(this.state.position)}
+        </Text>
+        <View style={{
+          flex: 1,
+          marginLeft: 10,
+          marginRight: 10,
+          position: 'relative'
+        }}>
+          <Slider
+            minimumTrackTintColor='#1fb28a'
+            maximumTrackTintColor='#d3d3d3'
+            thumbTintColor='#1a9274'
+            value={this.getProgress()}
+            onSlidingStart={() => {
+              this.touching = true
+            }}
+            onSlidingComplete={(value) => {
+              this.touching = false
+              TrackPlayer.seekTo(value * this.state.duration)
+            }}
+          ></Slider>
+        </View>
+        <Text
+          style={styles.time}
+        >{formatTime(this.state.duration)}</Text>
+      </View>
+    )
   }
 }
 
@@ -50,33 +75,25 @@ class Play extends Component {
     title: '标题',
     author: ['艺术家'],
     cover: 'http://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg',
-    time: {
-      duration: -1,
-      current: 0
-    },
-    playing: false,
-    loaded: false
+    playing: false
   }
   componentDidMount () {
-    this.setState({
-      title: sound.title,
-      author: sound.author,
-      cover: sound.cover
-    })
-
-    // um...🤕 WIP[!]
     this.updateUI()
-    interval = setInterval(() => { this.updateUI() }, 1000)
   }
   updateUI () {
-    sound.player.getCurrentTime((seconds, isPlaying) => {
+    TrackPlayer.getCurrentTrack()
+      .then(TrackPlayer.getTrack)
+      .then((track) => {
+        this.setState({
+          title: track.title,
+          author: track.artist,
+          cover: track.artwork
+        })
+      })
+
+    TrackPlayer.getState().then((state) => {
       this.setState({
-        time: {
-          duration: sound.player.getDuration(),
-          current: seconds
-        },
-        playing: isPlaying,
-        loaded: sound.player.isLoaded()
+        playing: state !== 'STATE_PAUSED'
       })
     })
   }
@@ -84,11 +101,6 @@ class Play extends Component {
     clearInterval(interval)
   }
   render () {
-    const formatTime = (second) => {
-      return moment('2018-01-01 00:00:00')
-              .seconds(second)
-              .format('mm:ss')
-    }
 
     return (
       <View style={{flex: 1}}>
@@ -110,7 +122,7 @@ class Play extends Component {
         <View style={styles.container}>
           <View style={styles.info}>
             <Text style={styles.name}>{this.state.title}</Text>
-            <Text style={styles.singer}>{this.state.author.join('/')}</Text>
+            <Text style={styles.singer}>{this.state.author}</Text>
           </View>
           <View style={styles.cover}>
             <View style={styles.coverContent}>
@@ -123,27 +135,7 @@ class Play extends Component {
             </View>
           </View>
           <View style={styles.controller}>
-            <View style={styles.progressContent}>
-              <Text
-                style={styles.time}
-              >
-              {formatTime(this.state.time.current)}
-              </Text>
-              <View style={{
-                flex: 1,
-                marginLeft: 10,
-                marginRight: 10,
-                position: 'relative'
-              }}>
-                <ProgressBar
-                  value={this.state.time.current/this.state.time.duration}
-                  onSlidingComplete={value => sound.player.setCurrentTime( value * this.state.time.duration )}
-                ></ProgressBar>
-              </View>
-              <Text
-                style={styles.time}
-              >{formatTime(this.state.time.duration)}</Text>
-            </View>
+            <ProgressBar></ProgressBar>
             <View style={styles.controllerContainer}>
               <View>
                 <Icon style={styles.button} name="random"></Icon>
@@ -153,17 +145,15 @@ class Play extends Component {
               </View>
               <View>
                 {
-                  this.state.loaded
-                  ? this.state.playing
+                  this.state.playing
                     ? <Icon style={styles.button} onPress={() => {
-                      sound.player.pause()
+                      TrackPlayer.pause()
                       this.updateUI()
                     }} name="pause"></Icon>
                     : <Icon style={styles.button} onPress={() => {
-                      sound.player.play()
+                      TrackPlayer.play()
                       this.updateUI()
                     }} name="play"></Icon>
-                  : <ActivityIndicator></ActivityIndicator>
                 }
               </View>
               <View>

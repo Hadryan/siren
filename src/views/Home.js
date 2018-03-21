@@ -9,16 +9,14 @@ import {
   RefreshControl,
   TouchableHighlight
 } from 'react-native'
+import TrackPlayer from 'react-native-track-player'
 
 import Panel from '../components/Panel'
 import PlayList from '../components/PlayList'
 import Album from '../components/Album'
 import PlayController from '../components/PlayController'
 
-import Sound from '../lib/sound'
 import Api from '../lib/api'
-
-const sound = Sound.instance
 
 class Home extends Component {
   constructor (props) {
@@ -35,7 +33,7 @@ class Home extends Component {
     playController: false
   }
   componentWillMount () {
-    this.fetchData()
+    // this.fetchData()
   }
   fetchData () {
     this.setState({refreshing: true})
@@ -61,8 +59,11 @@ class Home extends Component {
   }
   onNavigatorEvent (event) {
     if (event.id === 'didAppear') {
-      this.setState({
-        playController: !!sound.player
+      TrackPlayer.getState().then((state) => {
+        console.log(state)
+        this.setState({
+          playController: state !== 'STATE_STOPPED'
+        })
       })
     }
   }

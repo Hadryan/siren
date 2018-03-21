@@ -38,7 +38,6 @@ function request (url, options) {
     }
   })
   .then((response) => {
-    console.log(response)
     return response.json()
   })
   .catch((error) => {

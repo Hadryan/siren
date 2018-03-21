@@ -16,14 +16,13 @@ import {
   AsyncStorage
 } from 'react-native'
 import { Navigation } from 'react-native-navigation'
+import TrackPlayer from 'react-native-track-player'
 import Icon from '../lib/icon'
 import SongItem from '../components/SongItem'
 
-import Sound from '../lib/sound'
 import api from '../lib/api'
 import { unique } from '../lib/tools'
 
-const sound = Sound.instance
 
 class Search extends Component {
   static navigatorStyle = {
@@ -199,38 +198,42 @@ class Search extends Component {
             style={{marginBottom: 20}}
             data={this.state.datas.list}
             renderItem={({item}) =>
-              <TouchableOpacity onPress={() => {
-                api.getDetailById(item.id)
-                  .then((data) => {
-                    let url = data.url
-                    console.log(item, data)
-                    if (!url) {
-                      this.props.navigator.showLightBox({
-                        screen: 'crnaproject.Notice',
-                        passProps: {
-                          message: '👋 暂时没有歌曲资源'
-                        },
-                        style: {
-                          backgroundColor: 'rgba(255,255,255,.9)',
-                          tapBackgroundToDismiss: true
-                        }
-                      })
-                    } else {
-                      
-                      sound.setBaseInfo(url, item.name, item.artists.map(i => i.name), data.cover)
-                        .then(() => {
-                          sound.play()
+              <View style={{marginBottom: 10}}>
+                <TouchableOpacity onPress={() => {
+                  api.getDetailById(item.id)
+                    .then((data) => {
+                      let url = data.url
+                      console.log(item, data)
+                      if (!url) {
+                        this.props.navigator.showLightBox({
+                          screen: 'crnaproject.Notice',
+                          passProps: {
+                            message: '👋 暂时没有歌曲资源'
+                          },
+                          style: {
+                            backgroundColor: 'rgba(255,255,255,.9)',
+                            tapBackgroundToDismiss: true
+                          }
+                        })
+                      } else {
+                        TrackPlayer.add({
+                          id: String(item.id),
+                          url,
+                          title: item.name,
+                          artist: item.artists.map(i => i.name).join('/'),
+                          artwork: data.cover
+                        }).then(() => {
+                          TrackPlayer.play()
                           this.props.navigator.push({
                             screen: 'crnaproject.Play'
                           })
                         })
-                    }
-                  })
-              }}>
-                <View style={{marginBottom: 10}}>
+                      }
+                    })
+                }}>
                   <SongItem data={item}></SongItem>
-                </View>
-              </TouchableOpacity>
+                </TouchableOpacity>
+              </View>
             }
             keyExtractor={(item) => item.id}
             ListFooterComponent={() => 

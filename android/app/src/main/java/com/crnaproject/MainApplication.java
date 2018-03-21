@@ -5,6 +5,8 @@ import android.app.Application;
 import com.reactnativenavigation.NavigationApplication;
 import com.dylanvann.fastimage.FastImageViewPackage;
 import com.cmcewen.blurview.BlurViewPackage;
+import cc.rocwang.aescrypto.AesCryptoPackage;
+import guichaguri.trackplayer.TrackPlayer;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -30,7 +32,9 @@ public class MainApplication extends NavigationApplication {
   protected List<ReactPackage> getPackages() {
     return Arrays.<ReactPackage>asList(
           new FastImageViewPackage(),
-          new BlurViewPackage()
+          new TrackPlayer(),
+          new BlurViewPackage(),
+          new AesCryptoPackage()
     );
   }
 
