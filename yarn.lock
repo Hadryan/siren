@@ -3707,10 +3707,6 @@ react-native-track-player@^0.2.2:
   version "0.2.2"
   resolved "http://registry.npm.taobao.org/react-native-track-player/download/react-native-track-player-0.2.2.tgz#6ad9c70f2da44976d286212e83ba1796f951c506"
 
-react-native-track-player@react-native-kit/react-native-track-player#dev:
-  version "0.2.2"
-  resolved "https://codeload.github.com/react-native-kit/react-native-track-player/tar.gz/1b53d348eacc674776ad66ee31271da035508aa0"
-
 react-native-vector-icons@^4.5.0:
   version "4.5.0"
   resolved "http://registry.npm.taobao.org/react-native-vector-icons/download/react-native-vector-icons-4.5.0.tgz#6b95619e64f62f05f579f74a01fe5640df95158b"

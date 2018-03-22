@@ -93,7 +93,7 @@ class Play extends Component {
 
     TrackPlayer.getState().then((state) => {
       this.setState({
-        playing: state !== 'STATE_PAUSED'
+        playing: state !== TrackPlayer.STATE_PAUSED
       })
     })
   }
@@ -103,7 +103,7 @@ class Play extends Component {
   render () {
 
     return (
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, backgroundColor: '#333'}}>
         <StatusBar
           barStyle="light-content"
           translucent
@@ -200,27 +200,39 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 20,
-    color: '#fff'
+    color: '#fff',
+    textShadowOffset: {
+      width: 1,
+      height: 1
+    },
+    textShadowRadius:2,  
+    textShadowColor:'#333'
   },
   singer: {
     fontSize: 12,
     color: '#E7E7E7',
-    marginTop: 10
+    marginTop: 10,
+    textShadowOffset: {
+      width: 1,
+      height: 1
+    },
+    textShadowRadius:2,  
+    textShadowColor:'#333' 
   },
   cover: {
     flex: 2,
     justifyContent: 'center'
   },
   coverContent: {
-    width: (height / 2) - 100,
-    height: (height / 2) - 100,
+    width: (height * 0.6) - 100,
+    height: (height * 0.6) - 100,
     backgroundColor: 'rgba(0,0,0,.23)',
     padding: 7,
-    borderRadius: ((height / 2) - 100 ) / 2
+    borderRadius: ((height * 0.6) - 100 ) / 2
   },
   coverImage: {
     flex: 1,
-    borderRadius: ((height / 2) - 110 ) / 2 
+    borderRadius: ((height * 0.6) - 110 ) / 2 
   },
   controller: {
     flex: 1,

@@ -64,7 +64,7 @@ class PlayController extends Component {
 
     TrackPlayer.getState().then((state) => {
       this.setState({
-        playing: state !== 'STATE_PAUSED'
+        playing: state !== TrackPlayer.STATE_PAUSED
       })
     })
   }

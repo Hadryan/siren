@@ -32,8 +32,18 @@ class Home extends Component {
     refreshing: false,
     playController: false
   }
-  componentWillMount () {
-    // this.fetchData()
+  async componentDidMount () {
+    await TrackPlayer.setupPlayer({})
+    TrackPlayer.updateOptions({
+        capabilities: [
+            TrackPlayer.CAPABILITY_PLAY,
+            TrackPlayer.CAPABILITY_PAUSE,
+            TrackPlayer.CAPABILITY_SEEK_TO,
+            TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
+            TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS
+        ]
+    })
+    this.updateUI()
   }
   fetchData () {
     this.setState({refreshing: true})
@@ -59,13 +69,19 @@ class Home extends Component {
   }
   onNavigatorEvent (event) {
     if (event.id === 'didAppear') {
-      TrackPlayer.getState().then((state) => {
-        console.log(state)
-        this.setState({
-          playController: state !== 'STATE_STOPPED'
-        })
-      })
+      this.updateUI()
     }
+  }
+  updateUI () {
+    TrackPlayer.getState().then((state) => {
+      this.setState({
+        playController:
+          state !== TrackPlayer.STATE_NONE &&
+          state !== TrackPlayer.STATE_STOPPED
+      })
+    }).catch((error) => {
+      console.log('error', error)
+    })
   }
   render () {
     return (

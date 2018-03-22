@@ -18,12 +18,6 @@ import java.util.List;
 public class MainApplication extends NavigationApplication {
 
   @Override
-  public void onCreate() {
-    super.onCreate();
-    SoLoader.init(this, /* native exopackage */ false);
-  }
-
-  @Override
   public boolean isDebug() {
       // Make sure you are using BuildConfig from your own application
       return BuildConfig.DEBUG;

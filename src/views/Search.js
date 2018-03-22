@@ -223,7 +223,9 @@ class Search extends Component {
                           artist: item.artists.map(i => i.name).join('/'),
                           artwork: data.cover
                         }).then(() => {
-                          TrackPlayer.play()
+                          TrackPlayer
+                            .skip(String(item.id))
+                            .then(() => TrackPlayer.play())
                           this.props.navigator.push({
                             screen: 'crnaproject.Play'
                           })
