@@ -19,6 +19,7 @@ class ProgressSlider extends Component {
     buffering: 0
   }
   width = 0
+  prevLeft = 0
   touching = false
   getValue (value) {
     if (value < 0) {
@@ -32,9 +33,8 @@ class ProgressSlider extends Component {
   componentWillMount () {
     this._panResponder = PanResponder.create({
       onPanResponderMove: (evt, gestureState) => {
-        console.log(this.container)
         this.setState({
-          left: this.getValue(gestureState.moveX - this.state.sliderSize / 2)
+          left: this.getValue(gestureState.dx + this.prevLeft)
         })
         return true
       },
@@ -46,9 +46,11 @@ class ProgressSlider extends Component {
       },
       onPanResponderStart: () => {
         this.touching = true
+        this.prevLeft = this.state.left
       },
       onPanResponderRelease: () => {
         this.touching = false
+        this.props.onSlidingComplete(this.state.left / (this.width - this.state.sliderSize))
       }
     })
   }
@@ -59,18 +61,20 @@ class ProgressSlider extends Component {
       })
     }
     this.setState({
-      buffering: this.getValue(nextProps.buffering * this.width)
+      buffering: nextProps.buffering * this.width
     })
   }
   render () {
     return (
       <View
         style={{width: '100%', position: 'relative'}}
+        ref={ref => this.view = ref}
         onLayout={(event) => {
           this.width = event.nativeEvent.layout.width
+
           this.setState({
             left: this.getValue(this.props.value * this.width),
-            buffering: this.getValue(this.props.buffering * this.width)
+            buffering: this.props.buffering * this.width
           })
         }}
       >
@@ -133,9 +137,13 @@ class ProgressSlider extends Component {
           }}
           {...this._panResponder.panHandlers}
         >
-          <ActivityIndicator
+          {
+          this.props.played
+          ? <View></View>  
+          : <ActivityIndicator
             color='#fff'
           ></ActivityIndicator>
+          }
         </View>
       </View>
     )
@@ -144,7 +152,9 @@ class ProgressSlider extends Component {
 
 ProgressSlider.defaultProps = {
   value: 0,
-  buffering: 0
+  buffering: 0,
+  played: false,
+  onSlidingComplete: () => {}
 }
 
 export default ProgressSlider

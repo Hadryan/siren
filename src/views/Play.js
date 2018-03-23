@@ -12,6 +12,7 @@ import {
   ActivityIndicator
 } from 'react-native'
 import Slider from 'react-native-slider'
+import ProgressSlider from '../components/ProgressSlider'
 import moment from 'moment'
 
 import TrackPlayer from 'react-native-track-player'
@@ -20,10 +21,6 @@ import Icon from '../lib/icon'
 let interval
 
 class ProgressBar extends TrackPlayer.ProgressComponent {
-  touching = false
-  shouldComponentUpdate () {
-    return !this.touching
-  }
   render () {
 
     const formatTime = (second) => {
@@ -45,19 +42,14 @@ class ProgressBar extends TrackPlayer.ProgressComponent {
           marginRight: 10,
           position: 'relative'
         }}>
-          <Slider
-            minimumTrackTintColor='#1fb28a'
-            maximumTrackTintColor='#d3d3d3'
-            thumbTintColor='#1a9274'
+          <ProgressSlider
             value={this.getProgress()}
-            onSlidingStart={() => {
-              this.touching = true
-            }}
             onSlidingComplete={(value) => {
-              this.touching = false
               TrackPlayer.seekTo(value * this.state.duration)
             }}
-          ></Slider>
+            buffering={this.getBufferedProgress()}
+            played={this.state.position > 0}
+          ></ProgressSlider>
         </View>
         <Text
           style={styles.time}
