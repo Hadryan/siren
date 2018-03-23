@@ -8,6 +8,7 @@ import {
 import * as Progress from 'react-native-progress'
 import Icon from '../lib/icon'
 import TrackPlayer from 'react-native-track-player'
+import TrackPlayerType from '../lib/TrackPlayerType'
 
 class ProgressCover extends TrackPlayer.ProgressComponent {
   render () {
@@ -64,7 +65,7 @@ class PlayController extends Component {
 
     TrackPlayer.getState().then((state) => {
       this.setState({
-        playing: state !== TrackPlayer.STATE_PAUSED
+        playing: state !== TrackPlayerType.STATE_PAUSED
       })
     })
   }

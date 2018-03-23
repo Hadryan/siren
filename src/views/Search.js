@@ -203,18 +203,8 @@ class Search extends Component {
                   api.getDetailById(item.id)
                     .then((data) => {
                       let url = data.url
-                      console.log(item, data)
                       if (!url) {
-                        this.props.navigator.showLightBox({
-                          screen: 'crnaproject.Notice',
-                          passProps: {
-                            message: '👋 暂时没有歌曲资源'
-                          },
-                          style: {
-                            backgroundColor: 'rgba(255,255,255,.9)',
-                            tapBackgroundToDismiss: true
-                          }
-                        })
+                        Alert.alert('错误', '👋 暂时没有歌曲资源')
                       } else {
                         TrackPlayer.add({
                           id: String(item.id),

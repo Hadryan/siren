@@ -16,6 +16,7 @@ import ProgressSlider from '../components/ProgressSlider'
 import moment from 'moment'
 
 import TrackPlayer from 'react-native-track-player'
+import TrackPlayerType from '../lib/TrackPlayerType'
 import Icon from '../lib/icon'
 
 let interval
@@ -85,7 +86,7 @@ class Play extends Component {
 
     TrackPlayer.getState().then((state) => {
       this.setState({
-        playing: state !== TrackPlayer.STATE_PAUSED
+        playing: state !== TrackPlayerType.STATE_PAUSED
       })
     })
   }

@@ -10,6 +10,7 @@ import {
   TouchableHighlight
 } from 'react-native'
 import TrackPlayer from 'react-native-track-player'
+import TrackPlayerType from '../lib/TrackPlayerType'
 
 import Panel from '../components/Panel'
 import PlayList from '../components/PlayList'
@@ -74,10 +75,11 @@ class Home extends Component {
   }
   updateUI () {
     TrackPlayer.getState().then((state) => {
+      console.log(state, TrackPlayerType.STATE_STOPPED)
       this.setState({
         playController:
-          state !== TrackPlayer.STATE_NONE &&
-          state !== TrackPlayer.STATE_STOPPED
+          state !== TrackPlayerType.STATE_NONE &&
+          state !== TrackPlayerType.STATE_STOPPED
       })
     }).catch((error) => {
       console.log('error', error)
