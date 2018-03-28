@@ -16,6 +16,7 @@ import Panel from '../components/Panel'
 import PlayList from '../components/PlayList'
 import Album from '../components/Album'
 import PlayController from '../components/PlayController'
+import MusicList from '../components/MusicList'
 
 import Api from '../lib/api'
 
@@ -31,7 +32,8 @@ class Home extends Component {
     topList: [],
     newAlbums: [],
     refreshing: false,
-    playController: false
+    playController: false,
+    musicList: false
   }
   async componentDidMount () {
     await TrackPlayer.setupPlayer({})
@@ -169,12 +171,20 @@ class Home extends Component {
             <View style={{
               backgroundColor: '#FBFBFB'
             }}>
-              <PlayController></PlayController>
+              <PlayController listClick={() => {
+                this.setState({
+                  musicList: true
+                })
+              }}></PlayController>
             </View>
           </TouchableHighlight>
-          : <View></View>
+          : null
         }
-        
+        <MusicList show={this.state.musicList} onHide={() => {
+          this.setState({
+            musicList: false
+          })
+        }}></MusicList>
       </View>
     )
   }

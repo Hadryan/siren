@@ -16,13 +16,14 @@ import {
   AsyncStorage
 } from 'react-native'
 import { Navigation } from 'react-native-navigation'
-import TrackPlayer from 'react-native-track-player'
 import Icon from '../lib/icon'
 import SongItem from '../components/SongItem'
 
 import api from '../lib/api'
 import { unique } from '../lib/tools'
+import Sound from '../lib/sound'
 
+const sound = Sound.instance
 
 class Search extends Component {
   static navigatorStyle = {
@@ -206,16 +207,15 @@ class Search extends Component {
                       if (!url) {
                         Alert.alert('错误', '👋 暂时没有歌曲资源')
                       } else {
-                        TrackPlayer.add({
+                        sound.add({
                           id: String(item.id),
                           url,
                           title: item.name,
                           artist: item.artists.map(i => i.name).join('/'),
                           artwork: data.cover
                         }).then(() => {
-                          TrackPlayer
-                            .skip(String(item.id))
-                            .then(() => TrackPlayer.play())
+                          sound
+                            .play(String(item.id))
                           this.props.navigator.push({
                             screen: 'crnaproject.Play'
                           })

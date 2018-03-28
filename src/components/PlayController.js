@@ -3,7 +3,8 @@ import {
   View,
   Text,
   StyleSheet,
-  Image
+  Image,
+  TouchableOpacity
 } from 'react-native'
 import * as Progress from 'react-native-progress'
 import Icon from '../lib/icon'
@@ -94,12 +95,22 @@ class PlayController extends Component {
           }
           </View>
           <View>
-            <Icon style={styles.list} name="list"></Icon>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.listClick()
+              }}
+            >
+              <Icon style={styles.list} name="list"></Icon>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
     )
   }
+}
+
+PlayController.defaultProps = {
+  listClick: () => {}
 }
 
 const baseIcon = {

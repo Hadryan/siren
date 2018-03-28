@@ -8,7 +8,9 @@ const glyphMap = {
   'random': 58987,
   'repeatOne': 58898,
   'prev': 59032,
-  'next': 58897
+  'next': 58897,
+  'clear': 58937,
+  'delete': 59054
 }
 const Icon = createIconSet(glyphMap, 'iconfont')
 
