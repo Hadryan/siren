@@ -21,6 +21,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "big-integer": "^1.6.27",
+    "mobx": "^4.1.0",
+    "mobx-react": "^5.0.0",
     "moment": "^2.21.0",
     "react": "16.2.0",
     "react-native": "0.52.0",
