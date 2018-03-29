@@ -3699,6 +3699,12 @@ react-native-fast-image@^2.2.5:
   dependencies:
     prop-types "^15.5.10"
 
+react-native-linear-gradient@^2.4.0:
+  version "2.4.0"
+  resolved "http://registry.npm.taobao.org/react-native-linear-gradient/download/react-native-linear-gradient-2.4.0.tgz#51d8ea12bb72a59bede9edc87b694b16b64cf435"
+  dependencies:
+    prop-types "^15.5.10"
+
 react-native-navigation@^1.1.402:
   version "1.1.409"
   resolved "http://registry.npm.taobao.org/react-native-navigation/download/react-native-navigation-1.1.409.tgz#fbb37e0810845e751ad1543f1399897086d8afd5"

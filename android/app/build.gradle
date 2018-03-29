@@ -140,6 +140,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-linear-gradient')
     compile project(':react-native-track-player')
     compile project(':react-native-aes-kit')
     compile project(':react-native-fast-image')
