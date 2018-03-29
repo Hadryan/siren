@@ -7,22 +7,27 @@ import {
   Text,
   StyleSheet,
   TouchableWithoutFeedback,
-  Animated
+  TouchableOpacity,
+  Animated,
+  FlatList,
+  Platform
 } from 'react-native'
+import {
+  observer,
+  inject
+} from 'mobx-react'
 import { BlurView } from 'react-native-blur'
 import Item from './MusicListItem'
 import Icon from '../lib/icon'
-import Sound from '../lib/sound'
 
-const sound = Sound.instance
-
+@inject('music')
+@observer
 class MusicList extends Component {
   /**
    * hide this component logic code 
    */
   state = {
-    animate: new Animated.Value(this.props.show ? 1 : 0),
-    list: []
+    animate: new Animated.Value(this.props.show ? 1 : 0)
   }
   hideLayout () {
     Animated.timing(this.state.animate, {
@@ -37,13 +42,28 @@ class MusicList extends Component {
     }
   }
   componentWillMount () {
-    console.log(sound)
   }
   render () {
-    console.log(this.props.show)
+    const { music } = this.props
+
     if (!this.props.show) {
       return null
     }
+
+    const getPanel = (child) => {
+      if (Platform.OS === 'android') {
+        return <View style={[styles.panelBody, {
+          backgroundColor: 'rgba(255,255,255,.8)'
+        }]}>{child}</View>
+      } else {
+        return <BlurView
+        blurType="xlight"
+        style={styles.panelBody}
+        blurAmount={30}
+      >{child}</BlurView>
+      }
+    }
+
     return (
       <View style={styles.container}>
         <TouchableWithoutFeedback onPress={()=>{
@@ -67,28 +87,41 @@ class MusicList extends Component {
             }]
           }]}
         >
-          <BlurView
-            blurType="xlight"
-            style={styles.panelBody}
-            blurAmount={30}
-          > 
-            {
-              this.state.list.length > 0 ?
+          {
+            getPanel(
+              music.list.length > 0 ?
               (
                 <View style={{flex:1, width: '100%'}}>
                   <View style={styles.clear}>
-                    <Icon style={{fontSize: 20,color: '#757575'}} name="clear"></Icon>
+                    <TouchableOpacity onPress={() => {
+                      music.clearList()
+                    }}>
+                      <Icon style={{fontSize: 20,color: '#757575'}} name="clear"></Icon>
+                    </TouchableOpacity>
                   </View>
                   <View style={styles.list}>
-                    <Item></Item>
+                    <FlatList
+                      keyExtractor={(item) => item.id}
+                      data={music.list.slice()}
+                      extraData={music.trackId}
+                      renderItem={({item}) => <View style={{marginBottom: 10}}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            music.play(item.id)
+                          }}
+                        >
+                          <Item data={item} active={item.id === music.trackId}></Item>
+                        </TouchableOpacity>
+                      </View>}
+                    ></FlatList>
                   </View>
                 </View>
               ) :
               <View>
                 <Text style={{color: '#888', fontSize: 20}}>😉播放列表还没有歌曲</Text>
               </View>
-            }
-          </BlurView>
+            )
+          }
         </Animated.View>
       </View>
     )
@@ -105,7 +138,8 @@ const styles = StyleSheet.create({
   container: {
     position: 'absolute',
     width: '100%',
-    height: '100%'
+    height: '100%',
+    zIndex: 10
   },
   background: {
     position: 'absolute',

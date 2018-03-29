@@ -48,6 +48,9 @@ class Home extends Component {
     })
     this.updateUI()
   }
+  componentWillMount () {
+    this.fetchData()
+  }
   fetchData () {
     this.setState({refreshing: true})
 
@@ -77,7 +80,7 @@ class Home extends Component {
   }
   updateUI () {
     TrackPlayer.getState().then((state) => {
-      console.log(state, TrackPlayerType.STATE_STOPPED)
+      
       this.setState({
         playController:
           state !== TrackPlayerType.STATE_NONE &&

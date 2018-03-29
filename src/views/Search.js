@@ -16,6 +16,7 @@ import {
   AsyncStorage
 } from 'react-native'
 import { Navigation } from 'react-native-navigation'
+import { observer, inject } from 'mobx-react'
 import Icon from '../lib/icon'
 import SongItem from '../components/SongItem'
 
@@ -25,6 +26,8 @@ import Sound from '../lib/sound'
 
 const sound = Sound.instance
 
+@observer
+@inject('music')
 class Search extends Component {
   static navigatorStyle = {
     navBarHidden: true
@@ -147,6 +150,8 @@ class Search extends Component {
     })
   }
   render () {
+    console.log('search', this.state.datas.list)
+    const { music } = this.props
     const SearchHistory = (
       <View style={styles.history}>
         <View style={{
@@ -207,14 +212,14 @@ class Search extends Component {
                       if (!url) {
                         Alert.alert('错误', '👋 暂时没有歌曲资源')
                       } else {
-                        sound.add({
+                        music.add({
                           id: String(item.id),
                           url,
                           title: item.name,
                           artist: item.artists.map(i => i.name).join('/'),
                           artwork: data.cover
                         }).then(() => {
-                          sound
+                          music
                             .play(String(item.id))
                           this.props.navigator.push({
                             screen: 'crnaproject.Play'

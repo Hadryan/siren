@@ -11,6 +11,10 @@ import {
   StatusBar,
   ActivityIndicator
 } from 'react-native'
+import {
+  inject,
+  observer
+} from 'mobx-react'
 import Slider from 'react-native-slider'
 import ProgressSlider from '../components/ProgressSlider'
 import moment from 'moment'
@@ -19,7 +23,9 @@ import TrackPlayer from 'react-native-track-player'
 import TrackPlayerType from '../lib/TrackPlayerType'
 import Icon from '../lib/icon'
 
-let interval
+import MusicList from '../components/MusicList'
+
+import * as types from '../lib/playModeType'
 
 class ProgressBar extends TrackPlayer.ProgressComponent {
   render () {
@@ -60,40 +66,34 @@ class ProgressBar extends TrackPlayer.ProgressComponent {
   }
 }
 
+@inject('music')
+@observer
 class Play extends Component {
   static navigatorStyle = {
     navBarHidden: true
   }
   state = {
-    title: '标题',
-    author: ['艺术家'],
-    cover: 'http://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg',
-    playing: false
-  }
-  componentDidMount () {
-    this.updateUI()
-  }
-  updateUI () {
-    TrackPlayer.getCurrentTrack()
-      .then(TrackPlayer.getTrack)
-      .then((track) => {
-        this.setState({
-          title: track.title,
-          author: track.artist,
-          cover: track.artwork
-        })
-      })
-
-    TrackPlayer.getState().then((state) => {
-      this.setState({
-        playing: state !== TrackPlayerType.STATE_PAUSED
-      })
-    })
-  }
-  componentWillUnmount () {
-    clearInterval(interval)
+    musicList: false
   }
   render () {
+    const { music } = this.props
+    const currentMusic = music.list.find(item => item.id === music.trackId)
+
+    const getModeIcon = () => {
+      let name = ''
+      switch (music.mode) {
+        case types.LIST_CYCLE:
+          name = 'circulation'
+          break
+        case types.SINGLE_CYCLE:
+          name = 'repeatOne'
+          break
+        case types.RANDOM:
+          name = 'random'
+          break
+      }
+      return <Icon style={styles.button} name={name} onPress={() => {music.switchMode()}}></Icon>
+    }
 
     return (
       <View style={{flex: 1, backgroundColor: '#333'}}>
@@ -108,21 +108,21 @@ class Play extends Component {
             }}
             blurRadius={50}
             source={{
-              uri: this.state.cover
+              uri: currentMusic.artwork
             }}
           ></Image>
         </View>
         <View style={styles.container}>
           <View style={styles.info}>
-            <Text style={styles.name}>{this.state.title}</Text>
-            <Text style={styles.singer}>{this.state.author}</Text>
+            <Text style={styles.name}>{currentMusic.title}</Text>
+            <Text style={styles.singer}>{currentMusic.artist}</Text>
           </View>
           <View style={styles.cover}>
             <View style={styles.coverContent}>
               <Image
                 style={styles.coverImage}
                 source={{
-                  uri: this.state.cover
+                  uri: currentMusic.artwork
                 }}
               ></Image>
             </View>
@@ -131,33 +131,54 @@ class Play extends Component {
             <ProgressBar></ProgressBar>
             <View style={styles.controllerContainer}>
               <View>
-                <Icon style={styles.button} name="random"></Icon>
-              </View>
-              <View>
-                <Icon style={styles.button} name="prev"></Icon>
-              </View>
-              <View>
                 {
-                  this.state.playing
-                    ? <Icon style={styles.button} onPress={() => {
-                      TrackPlayer.pause()
-                      this.updateUI()
-                    }} name="pause"></Icon>
-                    : <Icon style={styles.button} onPress={() => {
-                      TrackPlayer.play()
-                      this.updateUI()
-                    }} name="play"></Icon>
+                  getModeIcon()
                 }
               </View>
               <View>
-                <Icon style={styles.button} name="next"></Icon>
+                <Icon
+                  style={styles.button}
+                  name="prev"
+                  onPress={() => {
+                    music.playPrev()
+                  }}
+                ></Icon>
               </View>
               <View>
-                <Icon style={styles.button} name="list"></Icon>
+              {
+                music.playerState !== TrackPlayerType.STATE_PAUSED
+                  ? <Icon style={styles.button} onPress={() => {
+                    music.pause()
+                  }} name="pause"></Icon>
+                  : <Icon style={styles.button} onPress={() => {
+                    music.play()
+                  }} name="play"></Icon>
+              }
+              </View>
+              <View>
+                <Icon
+                  style={styles.button}
+                  name="next"
+                  onPress={() => {
+                    music.playNext()
+                  }}
+                ></Icon>
+              </View>
+              <View>
+                <Icon style={styles.button} name="list" onPress={() => {
+                  this.setState({
+                    musicList: true
+                  })
+                }}></Icon>
               </View>
             </View>
           </View>
         </View>
+        <MusicList show={this.state.musicList} onHide={() => {
+          this.setState({
+            musicList: false
+          })
+        }}></MusicList>
       </View>
     )
   }
