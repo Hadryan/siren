@@ -20,14 +20,20 @@ class Music {
   history = []
   
   @action
-  add (track) {
+  async add (track) {
     let isHave = !!this.list.find((i) => i.id === track.id)
-    console.log('isHave', isHave)
-    if (!isHave) {
-      this.list.unshift(track)
-      return TrackPlayer.add(track)
+    let playerQueenTrack = true
+    try {
+      await TrackPlayer.getTrack(track.id)
+    } catch (e) {
+      playerQueenTrack = false
     }
-    return Promise.resolve()
+    if (!playerQueenTrack) {
+      if (!isHave) {
+        this.list.unshift(track)
+      }
+      await TrackPlayer.add(track)
+    }
   }
   @action
   async play (trackId, addTrack = true) {
