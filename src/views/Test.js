@@ -6,19 +6,20 @@ import {
   TouchableOpacity,
   Alert,
   Image,
+  Slider,
   findNodeHandle
 } from 'react-native'
 import {observer, inject} from 'mobx-react'
 import LinearGradient from 'react-native-linear-gradient'
-
-import MusicList from '../components/MusicList'
-import Item from '../components/MusicListItem'
+import ProgressSlider from '../components/ProgressSlider'
 
 @inject('music')
 @observer
 class Test extends Component {
   state = {
-    visible: false
+    visible: false,
+    value: 0,
+    sliderValue: 0
   }
   render () {
     console.log(this.props)
@@ -32,13 +33,31 @@ class Test extends Component {
       >
         <TouchableOpacity
           onPress={() => {
-            this.props.music.testAction()
+            this.setState({
+              value: this.state.sliderValue
+            })
           }}
         >
           <Text>修改</Text>
         </TouchableOpacity>
         <Text>值{this.props.music.playerState}</Text>
-        <MusicList show></MusicList>
+        <Slider
+          style={{
+            width: '100%'
+          }}
+          onValueChange={(data) => {
+            this.setState({
+              sliderValue: data
+            })
+          }}
+        ></Slider>
+        <Text>滑块值:{this.state.sliderValue}</Text>
+        <View style={{width: 200}}>
+        <ProgressSlider
+          isBuffer={false}
+          value={this.state.value}
+        ></ProgressSlider>
+        </View>
       </View>
     )
   }

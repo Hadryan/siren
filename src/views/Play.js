@@ -54,6 +54,7 @@ class ProgressBar extends TrackPlayer.ProgressComponent {
           <ProgressSlider
             value={this.getProgress()}
             onSlidingComplete={(value) => {
+              console.log(value, value * this.state.duration)
               TrackPlayer.seekTo(value * this.state.duration)
             }}
             buffering={this.getBufferedProgress()}

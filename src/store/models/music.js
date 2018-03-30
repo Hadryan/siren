@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 import TrackPlayer from 'react-native-track-player'
 import * as types from '../../lib/playModeType'
+import TrackPlayerType from '../../lib/TrackPlayerType';
 
 class Music {
   @observable trackId = ''
@@ -117,15 +118,20 @@ class Music {
 const music = new Music()
 
 TrackPlayer.registerEventHandler(async (data) => {
+  console.log('event', data.type)
   switch (data.type) {
     case 'remote-play':
-      await music.play()
-      break
+    await music.play()
+    break
     case 'remote-pause':
-      await music.pause()
-      break
-    case 'playback-track-changed':
-      await music.playNext()
+    await music.pause()
+    break
+    case 'playback-state':
+      // WIP[] accurate case state 
+      const state = await TrackPlayer.getState()
+      if(state === TrackPlayerType.STATE_PAUSED) {
+        await music.playNext()
+      }
       break
   }
 
