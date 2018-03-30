@@ -26,11 +26,12 @@ import Sound from '../lib/sound'
 
 const sound = Sound.instance
 
-@observer
 @inject('music')
+@observer
 class Search extends Component {
   static navigatorStyle = {
-    navBarHidden: true
+    navBarHidden: true,
+    statusBarColor: '#fff'
   }
   state = {
     anis: [],
@@ -257,7 +258,6 @@ class Search extends Component {
         <StatusBar
           barStyle="dark-content"
           translucent
-          backgroundColor="#fff"
         ></StatusBar>
 
         <View style={styles.search}>

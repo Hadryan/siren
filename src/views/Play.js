@@ -73,7 +73,8 @@ class ProgressBar extends TrackPlayer.ProgressComponent {
 @observer
 class Play extends Component {
   static navigatorStyle = {
-    navBarHidden: true
+    navBarHidden: true,
+    statusBarColor: 'rgba(0,0,0,0.4)'
   }
   state = {
     rotateValue: new Animated.Value(0),
@@ -81,8 +82,8 @@ class Play extends Component {
   }
   rotateAnimation = Animated.loop(
     Animated.timing(this.state.rotateValue, {
-      toValue: 1,
-      duration: 50000,
+      toValue: 360,
+      duration: 40000,
       easing: Easing.linear,
       useNativeDriver: true
     })
@@ -108,7 +109,6 @@ class Play extends Component {
   render () {
     const { music } = this.props
     const currentMusic = music.list.find(item => item.id === music.trackId)
-    console.log(music.playerState)
 
     const getModeIcon = () => {
       let name = ''
@@ -155,7 +155,7 @@ class Play extends Component {
                   transform: [
                     {
                       rotate: this.state.rotateValue.interpolate({
-                        inputRange: [0, 1],
+                        inputRange: [0, 360],
                         outputRange: ['0deg', '360deg'],
                       })
                     }

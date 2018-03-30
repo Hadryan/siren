@@ -28,7 +28,8 @@ import Api from '../lib/api'
 @observer
 class Home extends Component {
   static navigatorStyle = {
-    navBarHidden: true
+    navBarHidden: true,
+    statusBarColor: 'rgba(0,0,0,0.4)'
   }
   state = {
     topList: [],
@@ -63,7 +64,6 @@ class Home extends Component {
     })
   }
   render () {
-    console.log(this.props.music.playerState)
     return (
       <View style={styles.container}>
         <StatusBar
