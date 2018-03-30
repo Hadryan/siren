@@ -9,7 +9,9 @@ import {
   Image,
   Dimensions,
   StatusBar,
-  ActivityIndicator
+  ActivityIndicator,
+  Animated,
+  Easing
 } from 'react-native'
 import {
   inject,
@@ -55,7 +57,7 @@ class ProgressBar extends TrackPlayer.ProgressComponent {
               TrackPlayer.seekTo(value * this.state.duration)
             }}
             buffering={this.getBufferedProgress()}
-            played={this.state.position > 0}
+            isBuffer={this.props.isBuffer}
           ></ProgressSlider>
         </View>
         <Text
@@ -73,11 +75,39 @@ class Play extends Component {
     navBarHidden: true
   }
   state = {
+    rotateValue: new Animated.Value(0),
     musicList: false
+  }
+  rotateAnimation = Animated.loop(
+    Animated.timing(this.state.rotateValue, {
+      toValue: 1,
+      duration: 50000,
+      easing: Easing.linear,
+      useNativeDriver: true
+    })
+  )
+  rotating = false
+  startRotate () {
+    if (this.rotating) return
+    this.rotating = true
+    this.rotateAnimation.start()
+  }
+  stopRotate () {
+    this.rotating = false
+    this.rotateAnimation.stop()
+  }
+  componentDidUpdate () {
+    const { music } = this.props
+    if (music.playerState === TrackPlayerType.STATE_PLAYING) {
+      this.startRotate()
+    } else {
+      this.stopRotate()
+    }
   }
   render () {
     const { music } = this.props
     const currentMusic = music.list.find(item => item.id === music.trackId)
+    console.log(music.playerState)
 
     const getModeIcon = () => {
       let name = ''
@@ -108,27 +138,36 @@ class Play extends Component {
             }}
             blurRadius={50}
             source={{
-              uri: currentMusic.artwork
+              uri: currentMusic ? currentMusic.artwork : 'http://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg'
             }}
           ></Image>
         </View>
         <View style={styles.container}>
           <View style={styles.info}>
-            <Text style={styles.name}>{currentMusic.title}</Text>
-            <Text style={styles.singer}>{currentMusic.artist}</Text>
+            <Text style={styles.name}>{ currentMusic ? currentMusic.title : '标题'}</Text>
+            <Text style={styles.singer}>{ currentMusic ? currentMusic.artist : '艺术家'}</Text>
           </View>
           <View style={styles.cover}>
             <View style={styles.coverContent}>
-              <Image
-                style={styles.coverImage}
+              <Animated.Image
+                style={[styles.coverImage, {
+                  transform: [
+                    {
+                      rotate: this.state.rotateValue.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: ['0deg', '360deg'],
+                      })
+                    }
+                  ]
+                }]}
                 source={{
-                  uri: currentMusic.artwork
+                  uri: currentMusic ? currentMusic.artwork : 'http://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg'
                 }}
-              ></Image>
+              ></Animated.Image>
             </View>
           </View>
           <View style={styles.controller}>
-            <ProgressBar></ProgressBar>
+            <ProgressBar isBuffer={music.playerState === TrackPlayerType.STATE_BUFFERING}></ProgressBar>
             <View style={styles.controllerContainer}>
               <View>
                 {
