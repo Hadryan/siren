@@ -9,6 +9,10 @@ import {
   RefreshControl,
   TouchableHighlight
 } from 'react-native'
+import {
+  observer,
+  inject
+} from 'mobx-react'
 import TrackPlayer from 'react-native-track-player'
 import TrackPlayerType from '../lib/TrackPlayerType'
 
@@ -20,11 +24,9 @@ import MusicList from '../components/MusicList'
 
 import Api from '../lib/api'
 
+@inject('music')
+@observer
 class Home extends Component {
-  constructor (props) {
-    super(props)
-    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this))
-  }
   static navigatorStyle = {
     navBarHidden: true
   }
@@ -34,19 +36,6 @@ class Home extends Component {
     refreshing: false,
     playController: false,
     musicList: false
-  }
-  async componentDidMount () {
-    await TrackPlayer.setupPlayer({})
-    TrackPlayer.updateOptions({
-        capabilities: [
-            TrackPlayer.CAPABILITY_PLAY,
-            TrackPlayer.CAPABILITY_PAUSE,
-            TrackPlayer.CAPABILITY_SEEK_TO,
-            TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
-            TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS
-        ]
-    })
-    this.updateUI()
   }
   componentWillMount () {
     this.fetchData()
@@ -73,24 +62,8 @@ class Home extends Component {
       })
     })
   }
-  onNavigatorEvent (event) {
-    if (event.id === 'didAppear') {
-      this.updateUI()
-    }
-  }
-  updateUI () {
-    TrackPlayer.getState().then((state) => {
-      
-      this.setState({
-        playController:
-          state !== TrackPlayerType.STATE_NONE &&
-          state !== TrackPlayerType.STATE_STOPPED
-      })
-    }).catch((error) => {
-      console.log('error', error)
-    })
-  }
   render () {
+    console.log(this.props.music.playerState)
     return (
       <View style={styles.container}>
         <StatusBar
@@ -163,7 +136,8 @@ class Home extends Component {
         </View>
         
         {
-          this.state.playController
+          this.props.music.playerState !== TrackPlayerType.STATE_NONE &&
+          this.props.music.playerState !== TrackPlayerType.STATE_STOPPED
           ? <TouchableHighlight
             onPress={() => {
               this.props.navigator.push({

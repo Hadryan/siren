@@ -3108,6 +3108,12 @@ mkdirp@0.5.0:
   dependencies:
     minimist "0.0.8"
 
+mobx-persist@^0.4.1:
+  version "0.4.1"
+  resolved "http://registry.npm.taobao.org/mobx-persist/download/mobx-persist-0.4.1.tgz#fe5790eda04e0ee0b91c512d1347104e09363f9a"
+  dependencies:
+    serializr "^1.1.11"
+
 mobx-react@^5.0.0:
   version "5.0.0"
   resolved "http://registry.npm.taobao.org/mobx-react/download/mobx-react-5.0.0.tgz#8d5a33be376fa22b184a6f555d40a6a3a8459a16"
@@ -4145,6 +4151,10 @@ send@0.13.2:
 serialize-error@^2.1.0:
   version "2.1.0"
   resolved "http://registry.npm.taobao.org/serialize-error/download/serialize-error-2.1.0.tgz#50b679d5635cdf84667bdc8e59af4e5b81d5f60a"
+
+serializr@^1.1.11:
+  version "1.1.14"
+  resolved "http://registry.npm.taobao.org/serializr/download/serializr-1.1.14.tgz#abd4341592b8f7b38cca9329d7d659d35418f559"
 
 serve-favicon@~2.3.0:
   version "2.3.2"

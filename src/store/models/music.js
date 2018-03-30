@@ -7,15 +7,16 @@ import {
 import {
   Platform
 } from 'react-native'
+import { persist } from 'mobx-persist'
 import TrackPlayer from 'react-native-track-player'
 import * as types from '../../lib/playModeType'
-import TrackPlayerType from '../../lib/TrackPlayerType';
+import TrackPlayerType from '../../lib/TrackPlayerType'
 
 class Music {
-  @observable trackId = ''
-  @observable list = []
-  @observable playerState = ''
-  @observable mode = types.LIST_CYCLE
+  @persist @observable trackId = ''
+  @persist('list') @observable list = []
+  @persist @observable playerState = ''
+  @persist @observable mode = types.LIST_CYCLE
   history = []
   
   @action
@@ -132,15 +133,17 @@ TrackPlayer.registerEventHandler(async (data) => {
   console.log('event', data.type)
   switch (data.type) {
     case 'remote-play':
-    await music.play()
-    break
+      await music.play()
+      break
     case 'remote-pause':
-    await music.pause()
-    break
+      await music.pause()
+      break
     case 'playback-state':
       // WIP[] accurate case state 
+      let durantion = await TrackPlayer.getDuration()
+      let position = await TrackPlayer.getPosition()
       const state = await TrackPlayer.getState()
-      if(state === TrackPlayerType.STATE_PAUSED) {
+      if(state === TrackPlayerType.STATE_PAUSED && durantion === position) {
         await music.playNext()
       }
       break
@@ -149,4 +152,5 @@ TrackPlayer.registerEventHandler(async (data) => {
   await music.updateState()
 })
 
+music.updateState()
 export default music

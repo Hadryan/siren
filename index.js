@@ -13,6 +13,7 @@ Navigation.registerComponent('crnaproject.Search', () => Search, store, Provider
 Navigation.registerComponent('crnaproject.Play', () => Play, store, Provider)
 Navigation.registerComponent('crnaproject.Notice', () => Notice, store, Provider)
 
+
 Navigation.startSingleScreenApp({
   screen: {
     screen: 'crnaproject.Home'
