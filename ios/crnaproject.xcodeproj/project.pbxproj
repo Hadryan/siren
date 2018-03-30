@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -43,8 +44,8 @@
 		BB4C5AA52056566D000BAD67 /* libART.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB4C5A7920565650000BAD67 /* libART.a */; };
 		BB7D112D2050D32D00023103 /* iconfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BB7D112C2050D32D00023103 /* iconfont.ttf */; };
 		BB7D11B22051387100023103 /* libReactNativeNavigation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB7D11AF205137A300023103 /* libReactNativeNavigation.a */; };
-		DEDF37157DE843BF91D7453B /* libRNTrackPlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C3FB98693D64F4BBCAC1EE4 /* libRNTrackPlayer.a */; };
 		DDFA00B73A8844DAB7353702 /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 470115F7F9E141F5A76B72F4 /* libBVLinearGradient.a */; };
+		DEDF37157DE843BF91D7453B /* libRNTrackPlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C3FB98693D64F4BBCAC1EE4 /* libRNTrackPlayer.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -272,6 +273,20 @@
 			remoteGlobalIDString = 9B0E28291F07D76F00B71D2A;
 			remoteInfo = RNTrackPlayer;
 		};
+		BB3F79A3206E12FB004644A6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 822BC4B23A6C4FE7B354D597 /* BVLinearGradient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = BVLinearGradient;
+		};
+		BB3F79A5206E12FB004644A6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 822BC4B23A6C4FE7B354D597 /* BVLinearGradient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 64AA15081EF7F30100718508;
+			remoteInfo = "BVLinearGradient-tvOS";
+		};
 		BB4C5A7820565650000BAD67 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BB4C5A7320565650000BAD67 /* ART.xcodeproj */;
@@ -404,12 +419,14 @@
 		2D02E47B1E0B4A5D006451C7 /* crnaproject-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "crnaproject-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* crnaproject-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "crnaproject-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		470115F7F9E141F5A76B72F4 /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
 		52176A2CA74143FEB81A1791 /* libFastImage.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libFastImage.a; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		6965A5364FB04CCEAA76F46C /* libRNBlur.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNBlur.a; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		7AC8718880DA410EA5B04199 /* RCTAesCrypto.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTAesCrypto.xcodeproj; path = "../node_modules/react-native-aes-kit/ios/RCTAesCrypto.xcodeproj"; sourceTree = "<group>"; };
 		7C3FB98693D64F4BBCAC1EE4 /* libRNTrackPlayer.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNTrackPlayer.a; sourceTree = "<group>"; };
+		822BC4B23A6C4FE7B354D597 /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		A97F236CDE6E44E0B9725BE1 /* libRCTAesCrypto.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTAesCrypto.a; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
@@ -419,8 +436,6 @@
 		BB7D112C2050D32D00023103 /* iconfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = iconfont.ttf; path = ../src/assets/fonts/iconfont.ttf; sourceTree = "<group>"; };
 		BB7D1184205137A300023103 /* ReactNativeNavigation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeNavigation.xcodeproj; path = "../node_modules/react-native-navigation/ios/ReactNativeNavigation.xcodeproj"; sourceTree = "<group>"; };
 		EBC6EE4A7FF543E1A0BCC2BE /* RNBlur.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNBlur.xcodeproj; path = "../node_modules/react-native-blur/ios/RNBlur.xcodeproj"; sourceTree = "<group>"; };
-		822BC4B23A6C4FE7B354D597 /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; name = "BVLinearGradient.xcodeproj"; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		470115F7F9E141F5A76B72F4 /* libBVLinearGradient.a */ = {isa = PBXFileReference; name = "libBVLinearGradient.a"; path = "libBVLinearGradient.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -707,6 +722,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		BB3F799F206E12FB004644A6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BB3F79A4206E12FB004644A6 /* libBVLinearGradient.a */,
+				BB3F79A6206E12FB004644A6 /* libBVLinearGradient.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		BB4C5A7420565650000BAD67 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -747,6 +771,7 @@
 				52176A2CA74143FEB81A1791 /* libFastImage.a */,
 				A97F236CDE6E44E0B9725BE1 /* libRCTAesCrypto.a */,
 				7C3FB98693D64F4BBCAC1EE4 /* libRNTrackPlayer.a */,
+				470115F7F9E141F5A76B72F4 /* libBVLinearGradient.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -857,6 +882,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = 2H924UEC2J;
 						LastSwiftMigration = 920;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -885,6 +911,10 @@
 				{
 					ProductGroup = BB4C5A7420565650000BAD67 /* Products */;
 					ProjectRef = BB4C5A7320565650000BAD67 /* ART.xcodeproj */;
+				},
+				{
+					ProductGroup = BB3F799F206E12FB004644A6 /* Products */;
+					ProjectRef = 822BC4B23A6C4FE7B354D597 /* BVLinearGradient.xcodeproj */;
 				},
 				{
 					ProductGroup = BB55D0DA2050CFA7003D0485 /* Products */;
@@ -1174,6 +1204,20 @@
 			fileType = archive.ar;
 			path = libRNTrackPlayer.a;
 			remoteRef = BB02B4DB20624F8500D38C33 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		BB3F79A4206E12FB004644A6 /* libBVLinearGradient.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libBVLinearGradient.a;
+			remoteRef = BB3F79A3206E12FB004644A6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		BB3F79A6206E12FB004644A6 /* libBVLinearGradient.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libBVLinearGradient.a;
+			remoteRef = BB3F79A5206E12FB004644A6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		BB4C5A7920565650000BAD67 /* libART.a */ = {
@@ -1485,6 +1529,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = 2H924UEC2J;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-blur/ios",
@@ -1500,6 +1545,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.moonou.siren;
 				PRODUCT_NAME = crnaproject;
 				SWIFT_OBJC_BRIDGING_HEADER = "crnaproject-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1514,6 +1560,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2H924UEC2J;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-blur/ios",
@@ -1529,6 +1576,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.moonou.siren;
 				PRODUCT_NAME = crnaproject;
 				SWIFT_OBJC_BRIDGING_HEADER = "crnaproject-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
