@@ -150,7 +150,6 @@ class Search extends Component {
     })
   }
   render () {
-    console.log('search', this.state.datas.list)
     const { music } = this.props
     const SearchHistory = (
       <View style={styles.history}>
@@ -217,7 +216,7 @@ class Search extends Component {
                           url,
                           title: item.name,
                           artist: item.artists.map(i => i.name).join('/'),
-                          artwork: data.cover
+                          artwork: data.cover || 'http://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg'
                         }).then(() => {
                           music
                             .play(String(item.id))

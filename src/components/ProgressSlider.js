@@ -138,11 +138,11 @@ class ProgressSlider extends Component {
           {...this._panResponder.panHandlers}
         >
           {
-          this.props.played
-          ? <View></View>  
-          : <ActivityIndicator
-            color='#fff'
-          ></ActivityIndicator>
+          this.props.isBuffer
+            ? <ActivityIndicator
+              color='#fff'
+            ></ActivityIndicator>
+            : null
           }
         </View>
       </View>
@@ -154,7 +154,8 @@ ProgressSlider.defaultProps = {
   value: 0,
   buffering: 0,
   played: false,
-  onSlidingComplete: () => {}
+  onSlidingComplete: () => {},
+  isBuffer: true
 }
 
 export default ProgressSlider
