@@ -20,12 +20,22 @@ class Music {
   
   @action
   add (track) {
-    this.list.unshift(track)
-    return TrackPlayer.add(track)
+    let isHave = !!this.list.find((i) => i.id === track.id)
+    console.log('isHave', isHave)
+    if (!isHave) {
+      this.list.unshift(track)
+      return TrackPlayer.add(track)
+    }
+    return Promise.resolve()
   }
   @action
-  async play (trackId) {
+  async play (trackId, addTrack = true) {
+    if (this.list.length === 0) return
+    
     if (trackId) {
+      if (addTrack) {
+        this.history.push(this.trackId)
+      }
       this.trackId = trackId
       await TrackPlayer.skip(trackId)
     }
@@ -79,6 +89,7 @@ class Music {
   }
   @action
   async playNext () {
+    this.history.push(this.trackId)
     let current,nextTackid
     this.list.forEach((item, index) => {
       if (item.id === this.trackId) {
@@ -99,10 +110,10 @@ class Music {
         break
     }
     await this.play(nextTackid)
-    this.history.push(nextTackid)
   }
   @action 
   async playPrev() {
+    console.log(this.history)
     let track = this.history.pop()
     // WIP[]
     if (track === this.trackId) {
@@ -111,7 +122,7 @@ class Music {
     if (!track) {
       track = this.trackId
     }
-    await this.play(track)
+    await this.play(track, false)
   }
 }
 

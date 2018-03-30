@@ -186,7 +186,7 @@ class Play extends Component {
               </View>
               <View>
               {
-                music.playerState !== TrackPlayerType.STATE_PAUSED
+                music.playerState === TrackPlayerType.STATE_PLAYING
                   ? <Icon style={styles.button} onPress={() => {
                     music.pause()
                   }} name="pause"></Icon>
