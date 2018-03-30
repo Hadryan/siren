@@ -50,14 +50,15 @@ class ProgressSlider extends Component {
       },
       onPanResponderRelease: () => {
         this.touching = false
-        this.props.onSlidingComplete(this.state.left / (this.width - this.state.sliderSize))
+        let value = this.state.left / (this.width - this.state.sliderSize)
+        this.props.onSlidingComplete(value)
       }
     })
   }
   componentWillReceiveProps (nextProps) {
     if (!this.touching && nextProps.value !== this.props.value) {
       this.setState({
-        left: this.getValue(nextProps.value * this.width)
+        left: this.getValue(nextProps.value * (this.width - this.state.sliderSize))
       })
     }
     this.setState({
@@ -115,6 +116,8 @@ class ProgressSlider extends Component {
             height: 5,
             backgroundColor: '#1fb28a',
             borderRadius: 2.5,
+            borderBottomRightRadius: 0,
+            borderTopRightRadius: 0,
             position: 'absolute',
             width: this.state.left,
             top: '50%',
