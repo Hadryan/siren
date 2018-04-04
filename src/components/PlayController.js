@@ -35,11 +35,13 @@ class ProgressCover extends TrackPlayer.ProgressComponent {
             uri: this.props.cover
           }}
           style={{
-            width: 50,
-            height: 50,
+            width: 46,
+            height: 46,
             position: 'absolute',
             zIndex: 1,
-            borderRadius: 25
+            borderRadius: 23,
+            top: 2,
+            left: 2
           }}
         ></Image>
       </View>
@@ -120,7 +122,7 @@ const styles = StyleSheet.create({
   cover: {
     width: 50,
     height: 50,
-    backgroundColor: '#ddd',
+    // backgroundColor: '#ddd',
     borderRadius: 25,
     position: 'relative'
   },
