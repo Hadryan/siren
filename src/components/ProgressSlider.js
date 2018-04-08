@@ -114,7 +114,7 @@ class ProgressSlider extends Component {
         <View
           style={{
             height: 5,
-            backgroundColor: '#1fb28a',
+            backgroundColor: '#fff',
             borderRadius: 2.5,
             borderBottomRightRadius: 0,
             borderTopRightRadius: 0,
@@ -133,10 +133,13 @@ class ProgressSlider extends Component {
           style={{
             width: this.state.sliderSize,
             height: this.state.sliderSize,
-            backgroundColor: '#1fb28a',
+            backgroundColor: '#fff',
             borderRadius: this.state.sliderSize / 2,
             left: this.state.left,
-            zIndex: 4
+            zIndex: 4,
+            borderColor: '#D5D5D5',
+            borderStyle: 'solid',
+            borderWidth: 4
           }}
           {...this._panResponder.panHandlers}
         >

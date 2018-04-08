@@ -109,7 +109,7 @@ class Play extends Component {
   render () {
     const { music } = this.props
     const currentMusic = music.list.find(item => item.id === music.trackId)
-
+    
     const getModeIcon = () => {
       let name = ''
       switch (music.mode) {
@@ -187,10 +187,10 @@ class Play extends Component {
               <View>
               {
                 music.playerState === TrackPlayerType.STATE_PLAYING
-                  ? <Icon style={styles.button} onPress={() => {
+                  ? <Icon style={styles.largeButton} onPress={() => {
                     music.pause()
                   }} name="pause"></Icon>
-                  : <Icon style={styles.button} onPress={() => {
+                  : <Icon style={styles.largeButton} onPress={() => {
                     music.play()
                   }} name="play"></Icon>
               }
@@ -281,12 +281,12 @@ const styles = StyleSheet.create({
     width: (height * 0.6) - 100,
     height: (height * 0.6) - 100,
     backgroundColor: 'rgba(0,0,0,.23)',
-    padding: 7,
+    padding: 20,
     borderRadius: ((height * 0.6) - 100 ) / 2
   },
   coverImage: {
     flex: 1,
-    borderRadius: ((height * 0.6) - 110 ) / 2 
+    borderRadius: (height * 0.6 - 140) / 2
   },
   controller: {
     flex: 1,
@@ -303,10 +303,15 @@ const styles = StyleSheet.create({
   },
   controllerContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
+    alignItems: 'center'
   },
   button: {
     fontSize: 20,
+    color: '#fff'
+  },
+  largeButton: {
+    fontSize: 30,
     color: '#fff'
   },
   time: {

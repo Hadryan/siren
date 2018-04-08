@@ -23,7 +23,7 @@ class ProgressCover extends TrackPlayer.ProgressComponent {
           progress={this.getProgress()}
           borderWidth={0}
           thickness={2}
-          color='#11999E'
+          color='#504499'
           strokeCap='round'
           style={{
             position: 'absolute',

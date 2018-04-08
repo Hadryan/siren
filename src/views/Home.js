@@ -13,6 +13,7 @@ import {
   observer,
   inject
 } from 'mobx-react'
+import LinearGradient from 'react-native-linear-gradient';
 import TrackPlayer from 'react-native-track-player'
 import TrackPlayerType from '../lib/TrackPlayerType'
 
@@ -71,23 +72,29 @@ class Home extends Component {
           translucent
           backgroundColor="rgba(0,0,0,0.4)"
         ></StatusBar>
-        <View style={styles.search}>
-          <TouchableHighlight
-            underlayColor="#12686b"
-            onPress={() => {
-              this.props.navigator.push({
-                screen: 'crnaproject.Search',
-                title: 'Pushed Screen'
-              });
-            }}
-            style={styles.searchBox} 
-          >
-            <Text style={{
-              color: '#fff',
-              fontSize: 12
-            }}>请输入搜索关键词</Text>
-          </TouchableHighlight>
-        </View>
+        <LinearGradient
+          start={{x: 0.0, y: 0.5}}
+          end={{x: 1, y: 0.5}}
+          colors={['#D880DC', '#361688']}
+        >
+          <View style={styles.search}>
+            <TouchableHighlight
+              underlayColor="rgba(0,0,0,0.5)"
+              onPress={() => {
+                this.props.navigator.push({
+                  screen: 'crnaproject.Search',
+                  title: 'Pushed Screen'
+                });
+              }}
+              style={styles.searchBox} 
+            >
+              <Text style={{
+                color: '#fff',
+                fontSize: 12
+              }}>请输入搜索关键词</Text>
+            </TouchableHighlight>
+          </View>
+        </LinearGradient>
         
         <View style={styles.list}>
           <ScrollView
@@ -179,13 +186,12 @@ const styles = StyleSheet.create({
   search: {
     height: 100,
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#11999E'
+    alignItems: 'center'
   },
   searchBox: {
     padding: 8,
     width: '50%',
-    backgroundColor: '#138286',
+    backgroundColor: 'rgba(0,0,0,0.3)',
     borderRadius: 15,
     alignItems: 'center',
     marginTop: 10
