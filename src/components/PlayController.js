@@ -77,7 +77,7 @@ class PlayController extends Component {
         <View style={{flexDirection: 'row'}}>
           <View>
           {
-            music.playerState !== TrackPlayerType.STATE_PAUSED
+            music.playerState === TrackPlayerType.STATE_PLAYING
               ? <Icon style={styles.controllerIcon} onPress={() => {
                 music.pause()
               }} name="pause"></Icon>

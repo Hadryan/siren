@@ -19,6 +19,9 @@ TrackPlayer.setupPlayer({})
 const hydrate = create({ storage: AsyncStorage })
 
 hydrate('music', music)
+  .then(() => {
+    TrackPlayer.add(music.list.slice())
+  })
 export default {
   music
 }
