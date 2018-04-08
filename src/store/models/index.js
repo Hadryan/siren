@@ -3,7 +3,6 @@ import { AsyncStorage } from 'react-native'
 import { create } from 'mobx-persist'
 import music from './music'
 
-console.log('setup')
 TrackPlayer.setupPlayer({})
   .then(() => {
     TrackPlayer.updateOptions({

@@ -54,7 +54,7 @@ class Test extends Component {
         <Text>滑块值:{this.state.sliderValue}</Text>
         <View style={{width: 200}}>
         <ProgressSlider
-          isBuffer={false}
+          isBuffer={true}
           value={this.state.value}
         ></ProgressSlider>
         </View>

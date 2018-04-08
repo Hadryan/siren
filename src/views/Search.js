@@ -206,26 +206,12 @@ class Search extends Component {
             renderItem={({item}) =>
               <View style={{marginBottom: 10}}>
                 <TouchableOpacity onPress={() => {
-                  api.getDetailById(item.id)
-                    .then((data) => {
-                      let url = data.url
-                      if (!url) {
-                        Alert.alert('错误', '👋 暂时没有歌曲资源')
-                      } else {
-                        music.add({
-                          id: String(item.id),
-                          url,
-                          title: item.name,
-                          artist: item.artists.map(i => i.name).join('/'),
-                          artwork: data.cover || 'http://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg'
-                        }).then(() => {
-                          music
-                            .play(String(item.id))
-                          this.props.navigator.push({
-                            screen: 'crnaproject.Play'
-                          })
-                        })
-                      }
+                  music
+                    .fetchPlay(item)
+                    .then(() => {
+                      this.props.navigator.push({
+                        screen: 'crnaproject.Play'
+                      })
                     })
                 }}>
                   <SongItem data={item}></SongItem>

@@ -5,12 +5,14 @@ import {
   runInAction
 } from 'mobx'
 import {
-  Platform
+  Platform,
+  Alert
 } from 'react-native'
 import { persist } from 'mobx-persist'
 import TrackPlayer from 'react-native-track-player'
 import * as types from '../../lib/playModeType'
 import TrackPlayerType from '../../lib/TrackPlayerType'
+import api from '../../lib/api'
 
 class Music {
   @persist @observable trackId = ''
@@ -24,7 +26,8 @@ class Music {
     let isHave = !!this.list.find((i) => i.id === track.id)
     let playerQueenTrack = true
     try {
-      await TrackPlayer.getTrack(track.id)
+      let track = await TrackPlayer.getTrack(track.id)
+      console.log('尝试获取track结果', track)
     } catch (e) {
       playerQueenTrack = false
     }
@@ -32,13 +35,17 @@ class Music {
       if (!isHave) {
         this.list.unshift(track)
       }
+      if (!track.artwork) {
+        track.artwork = 'http://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg'
+      }
+      console.log('添加歌曲', track)
       await TrackPlayer.add(track)
     }
   }
   @action
   async play (trackId, addTrack = true) {
     if (this.list.length === 0) return
-    
+
     if (trackId) {
       if (addTrack) {
         this.history.push(this.trackId)
@@ -46,7 +53,7 @@ class Music {
       this.trackId = trackId
       await TrackPlayer.skip(trackId)
     }
-    return TrackPlayer.play()
+    await TrackPlayer.play()
   }
   @action
   async pause () {
@@ -72,7 +79,7 @@ class Music {
       return
     }
     if (id === this.trackId) {
-      TrackPlayer.stop()
+      await TrackPlayer.stop()
     }
     // WIP[remove will auto play on iOS]
     if (Platform.OS === 'android') {
@@ -120,7 +127,6 @@ class Music {
   }
   @action 
   async playPrev() {
-    console.log(this.history)
     let track = this.history.pop()
     // WIP[]
     if (track === this.trackId) {
@@ -131,12 +137,36 @@ class Music {
     }
     await this.play(track, false)
   }
+  /**
+   * 远程播放
+   * @param {Object} item 列表获取的原音乐项
+   */
+  async fetchPlay (item) {
+    const detail = await api.getDetailById(item.id)
+
+    if (!detail.url) {
+      Alert.alert('没有获取到播放链接')
+      return
+    }
+    let track = await this.list.find(i => i.id === String(item.id))
+    if (!track) {
+      track = {
+        id: String(item.id),
+        title: item.name,
+        artist: item.artists.map(i => i.name).join('/')
+      }
+    }
+    track.artwork = detail.cover
+    track.url = detail.url
+    await this.add(track)
+
+    await this.play(String(item.id))
+  }
 }
 
 const music = new Music()
 
 TrackPlayer.registerEventHandler(async (data) => {
-  console.log('event', data.type)
   switch (data.type) {
     case 'remote-play':
       await music.play()

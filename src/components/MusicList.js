@@ -107,7 +107,7 @@ class MusicList extends Component {
                       renderItem={({item}) => <View style={{marginBottom: 10}}>
                         <TouchableOpacity
                           onPress={() => {
-                            music.play(item.id)
+                            music.fetchPlay(item)
                           }}
                         >
                           <Item data={item} active={item.id === music.trackId}></Item>
