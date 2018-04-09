@@ -17,7 +17,6 @@ import Icon from '../lib/icon'
 @observer
 class MusicListItem extends Component {
   render () {
-    console.log('render')
     return (
       <View
         style={styles.item}
