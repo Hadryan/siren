@@ -18,32 +18,25 @@ import {
   observer
 } from 'mobx-react'
 import Slider from 'react-native-slider'
-import ProgressSlider from '../components/ProgressSlider'
-import moment from 'moment'
-
 import TrackPlayer from 'react-native-track-player'
+import ProgressSlider from '../components/ProgressSlider'
 import TrackPlayerType from '../lib/TrackPlayerType'
 import Icon from '../lib/icon'
 
 import MusicList from '../components/MusicList'
 
+import { durationFormat } from '../lib/tools'
+
 import * as types from '../lib/playModeType'
 
 class ProgressBar extends TrackPlayer.ProgressComponent {
   render () {
-
-    const formatTime = (second) => {
-      return moment('2018-01-01 00:00:00')
-              .seconds(second)
-              .format('mm:ss')
-    }
-
     return (
       <View style={styles.progressContent}>
         <Text
           style={styles.time}
         >
-        {formatTime(this.state.position)}
+        {durationFormat(this.state.position)}
         </Text>
         <View style={{
           flex: 1,
@@ -63,7 +56,7 @@ class ProgressBar extends TrackPlayer.ProgressComponent {
         </View>
         <Text
           style={styles.time}
-        >{formatTime(this.state.duration)}</Text>
+        >{durationFormat(this.state.duration)}</Text>
       </View>
     )
   }

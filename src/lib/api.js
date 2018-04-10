@@ -104,5 +104,25 @@ export default {
         cover: result[1].songs[0].al.picUrl
       }
     })
+  },
+  /**
+   * 获取歌单详情
+   * @param {string} id 
+   */
+  getMusiclistDetail (id) {
+    return encrypt(JSON.stringify({
+      id,
+      total: true,
+      csrf_token: '',
+      limit: 1000,
+      n: 1000,
+      offset: 0
+    }))
+      .then((data) => {
+        return request('http://music.163.com/weapi/v3/playlist/detail', {
+          method: 'POST',
+          body: ConvertData(data)
+        })
+      })
   }
 }

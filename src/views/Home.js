@@ -7,7 +7,8 @@ import {
   FlatList,
   ScrollView,
   RefreshControl,
-  TouchableHighlight
+  TouchableHighlight,
+  TouchableOpacity
 } from 'react-native'
 import {
   observer,
@@ -118,7 +119,18 @@ class Home extends Component {
                   <View style={{
                     marginRight: index === this.state.topList.length - 1 ? 0 : 30
                   }}>
-                    <PlayList data={item} />
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.props.navigator.push({
+                          screen: 'crnaproject.Musiclist',
+                          passProps: {
+                            id: item.id
+                          }
+                        })
+                      }}
+                    >
+                      <PlayList data={item} />
+                    </TouchableOpacity>
                   </View>
                 }
               ></FlatList>

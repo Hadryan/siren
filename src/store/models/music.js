@@ -25,29 +25,39 @@ class Music {
   async add (track) {
     let isHave = !!this.list.find((i) => i.id === track.id)
     let playerQueenTrack = true
-    try {
-      let track = await TrackPlayer.getTrack(track.id)
-      console.log('尝试获取track结果', track)
-    } catch (e) {
-      playerQueenTrack = false
-    }
-    if (!playerQueenTrack) {
-      if (!isHave) {
-        this.list.unshift(track)
-      }
-      if (!track.artwork) {
-        track.artwork = 'http://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg'
-      }
-      console.log('添加歌曲', track)
-      await TrackPlayer.add(track)
+    if (!isHave) {
+      this.list.unshift(track)
     }
   }
   @action
-  async play (trackId, addTrack = true) {
+  async play (trackId, addHistory = true) {
     if (this.list.length === 0) return
-
+    
     if (trackId) {
-      if (addTrack) {
+      let track = this.list.find((i) => i.id === trackId)
+  
+      if (!track) {
+        return new Error('歌曲未添加到列表')
+      }
+      
+      let playerQueenTrack = true
+      try {
+        await TrackPlayer.getTrack(track.id)
+      } catch (e) {
+        console.log('查询错误', e)
+        playerQueenTrack = false
+      }
+      if (!playerQueenTrack) {
+        
+        if (!track.artwork) {
+          track.artwork = 'http://p1.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg'
+        }
+        
+        console.log('add Track', track)
+        await TrackPlayer.add(track)
+      }
+
+      if (addHistory) {
         this.history.push(this.trackId)
       }
       this.trackId = trackId
@@ -75,7 +85,6 @@ class Music {
   @action
   async removeTrack(id) {
     if (!id) {
-      console.warn('need track id')
       return
     }
     if (id === this.trackId) {
@@ -123,7 +132,9 @@ class Music {
         nextTackid = this.list[Math.floor(Math.random() * this.list.length)].id
         break
     }
-    await this.play(nextTackid)
+    await this.fetchPlay({
+      id: nextTackid
+    })
   }
   @action 
   async playPrev() {
@@ -135,16 +146,18 @@ class Music {
     if (!track) {
       track = this.trackId
     }
-    await this.play(track, false)
+    await this.fetchPlay({
+      id: track
+    })
   }
   /**
    * 远程播放
    * @param {Object} item 列表获取的原音乐项
    */
-  async fetchPlay (item) {
+  async fetchPlay (item, played = true, alert = true) {
     const detail = await api.getDetailById(item.id)
 
-    if (!detail.url) {
+    if (!detail.url && alert) {
       Alert.alert('没有获取到播放链接')
       return
     }
@@ -160,7 +173,17 @@ class Music {
     track.url = detail.url
     await this.add(track)
 
-    await this.play(String(item.id))
+    if (played) {
+      await this.play(String(item.id))
+    }
+  }
+  async playList (list) {
+    await this.clearList()
+    
+    for (let item of Array.from(list).reverse()) {
+      await this.add(item)
+    }
+    await this.fetchPlay(list[0])
   }
 }
 

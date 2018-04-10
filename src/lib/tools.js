@@ -1,3 +1,4 @@
+import moment from 'moment'
 /**
  * 对象数组去重
  * @param {Array} arr 原数组
@@ -17,4 +18,14 @@ export const unique = (arr, key) => {
   })
 
   return resultArr
+}
+
+/**
+ * 转换时间
+ * @param {Number} second 
+ */
+export const durationFormat = (second) => {
+  return moment('2018-01-01 00:00:00')
+    .seconds(second)
+    .format('mm:ss')
 }

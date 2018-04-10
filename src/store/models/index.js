@@ -19,7 +19,9 @@ const hydrate = create({ storage: AsyncStorage })
 
 hydrate('music', music)
   .then(() => {
-    TrackPlayer.add(music.list.slice())
+    // console.log(music.list.slice())
+    // TrackPlayer.reset()
+    // TrackPlayer.add(music.list.slice())
   })
 export default {
   music
