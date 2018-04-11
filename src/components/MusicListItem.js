@@ -1,3 +1,6 @@
+/**
+ * 播放列表组件项
+ */
 import React, { Component } from 'react'
 import {
   View,

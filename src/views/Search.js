@@ -17,8 +17,11 @@ import {
 } from 'react-native'
 import { Navigation } from 'react-native-navigation'
 import { observer, inject } from 'mobx-react'
+import ScrollableTabView from 'react-native-scrollable-tab-view'
 import Icon from '../lib/icon'
 import SongItem from '../components/SongItem'
+import PlayListItem from '../components/PlayListItem'
+import Tabbar from '../components/Tabbar'
 
 import api from '../lib/api'
 import { unique } from '../lib/tools'
@@ -38,9 +41,16 @@ class Search extends Component {
     search: 0,
     searchKey: '',
     history: [],
-    datas: {
-      type: 1, // 对应结果类型
-      list: [], // 数据存放位置
+    // 歌曲搜索结果
+    musicData: {
+      list: [], // 列表
+      loading: false, // 加载状态
+      total: 1, // 总数量
+      page: 0 // 页数
+    },
+    // 歌单搜索结果
+    musiclistData: {
+      list: [], // 列表
       loading: false, // 加载状态
       total: 1, // 总数量
       page: 0 // 页数
@@ -59,7 +69,7 @@ class Search extends Component {
       })).start()
     }
   }
-  fetchData () {
+  fetchData (type = 1) {
     if (this.state.searchKey.trim() === '') {
       Alert.alert('提示', '请输入正确的关键词', [
         {
@@ -68,8 +78,19 @@ class Search extends Component {
       ])
       return
     }
-    if (this.state.datas.loading) return
-    if (this.state.datas.list.length >= this.state.datas.total) {
+    let stateKey = 'musicData'
+    switch (type) {
+      case 1:
+        stateKey = 'musicData'
+        break
+      case 1000:
+        stateKey = 'musiclistData'
+        break
+    }
+    let handler = this.state[stateKey]
+    // break check
+    if (handler.loading) return
+    if (handler.list.length >= handler.total) {
       return
     }
 
@@ -77,39 +98,56 @@ class Search extends Component {
 
     this.setState({
       ...this.state,
-      datas: {
-        ...this.state.datas,
+      [stateKey]: {
+        ...handler,
         loading: true
       }
     })
-    api.search(this.state.searchKey, 1, this.state.datas.page * 20, true, 20)
+    api.search(this.state.searchKey, type, handler.page * 20, true, 20)
       .then((data) => {
+        console.log(data)
+        let baselist = []
+        switch (type) {
+          case 1:
+            baselist = data.result.songs
+            break
+          case 1000:
+            baselist = data.result.playlists
+            break
+        }
         data.code === 200 && this.setState({
           ...this.state,
-          datas: {
-            ...this.state.datas,
-            type: 1,
-            list: unique(this.state.datas.list.concat(data.result.songs), 'id'),
+          [stateKey]: {
+            ...handler,
+            list: unique(handler.list.concat(baselist), 'id'),
             loading: false,
             total: data.result.songCount,
-            page: this.state.datas.page + 1
+            page: handler.page + 1
           }
         })
       })
   }
+  setStateToDefault () {
+    return new Promise((resolve, reject) => {
+      this.setState({
+        musicData: {
+          list: [], // 列表
+          loading: false, // 加载状态
+          total: 1, // 总数量
+          page: 0 // 页数
+        }
+      }, resolve)
+    })
+  }
   toSearch () {
-    this.setState({
-      search: 1,
-      datas: {
-        type: 1, // 对应结果类型
-        list: [], // 数据存放位置
-        loading: false, // 加载状态
-        total: 1, // 总数量
-        page: 0 // 页数
-      }
-    },
-      this.fetchData
-    )
+    this.setStateToDefault()
+      .then(() => {
+        this.setState({
+          search: 1
+        }, () => {
+          this.fetchData(1)
+        })
+      })
   }
   addHistory (name) {
     // update search history
@@ -197,42 +235,78 @@ class Search extends Component {
 
     const SearchResult = (
       <View style={styles.result}>
-        <Text style={styles.title}>搜索结果</Text>
-        
-        <View style={{marginTop: 15, flexGrow: 1}}>
-          <FlatList
-            style={{marginBottom: 20}}
-            data={this.state.datas.list}
-            renderItem={({item}) =>
-              <View style={{marginBottom: 10}}>
-                <TouchableOpacity onPress={() => {
-                  music
-                    .fetchPlay(item)
-                    .then(() => {
-                      this.props.navigator.push({
-                        screen: 'crnaproject.Play'
+        <ScrollableTabView
+          renderTabBar={() => <Tabbar></Tabbar>}
+        >
+          <View style={{marginTop: 15, flexGrow: 1}} tabLabel="歌曲">
+            <FlatList
+              style={{marginBottom: 20}}
+              data={this.state.musicData.list}
+              renderItem={({item}) =>
+                <View style={{marginBottom: 10}}>
+                  <TouchableOpacity onPress={() => {
+                    music
+                      .fetchPlay(item)
+                      .then(() => {
+                        this.props.navigator.push({
+                          screen: 'crnaproject.Play'
+                        })
                       })
+                  }}>
+                    <SongItem data={item}></SongItem>
+                  </TouchableOpacity>
+                </View>
+              }
+              keyExtractor={(item) => item.id}
+              ListFooterComponent={() => 
+                <View style={{marginTop: 10}}>
+                  {
+                    this.state.musicData.loading ?
+                    <ActivityIndicator></ActivityIndicator> :
+                    <Text style={{textAlign: 'center'}}>~</Text>
+                  }
+                </View>
+              }
+              onEndReached={() => {
+                this.fetchData(1)
+              }}
+            ></FlatList>
+          </View>
+          <View style={{marginTop: 15, flexGrow: 1}} tabLabel="歌单">
+            <FlatList
+              style={{marginBottom: 20}}
+              data={this.state.musiclistData.list}
+              renderItem={({item}) =>
+                <View style={{marginBottom: 10}}>
+                  <TouchableOpacity onPress={() => {
+                    this.props.navigator.push({
+                      screen: 'crnaproject.Musiclist',
+                      passProps: {
+                        id: item.id
+                      }
                     })
-                }}>
-                  <SongItem data={item}></SongItem>
-                </TouchableOpacity>
-              </View>
-            }
-            keyExtractor={(item) => item.id}
-            ListFooterComponent={() => 
-              <View style={{marginTop: 10}}>
-                {
-                  this.state.datas.loading ?
-                  <ActivityIndicator></ActivityIndicator> :
-                  <Text style={{textAlign: 'center'}}>~</Text>
-                }
-              </View>
-            }
-            onEndReached={() => {
-              this.fetchData()
-            }}
-          ></FlatList>
-        </View>
+                  }}>
+                    <PlayListItem data={item}></PlayListItem>
+                  </TouchableOpacity>
+                </View>
+              }
+              keyExtractor={(item) => item.id}
+              ListFooterComponent={() => 
+                <View style={{marginTop: 10}}>
+                  {
+                    this.state.musiclistData.loading ?
+                    <ActivityIndicator></ActivityIndicator> :
+                    <Text style={{textAlign: 'center'}}>~</Text>
+                  }
+                </View>
+              }
+              onEndReached={() => {
+                this.fetchData(1000)
+              }}
+            ></FlatList>
+          </View>
+        </ScrollableTabView>
+        
       </View>
     )
 
