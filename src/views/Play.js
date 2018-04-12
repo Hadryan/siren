@@ -65,6 +65,10 @@ class ProgressBar extends TrackPlayer.ProgressComponent {
 @inject('music')
 @observer
 class Play extends Component {
+  constructor (props) {
+    super(props)
+    this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent.bind(this))
+  }
   static navigatorStyle = {
     navBarHidden: true,
     statusBarColor: 'rgba(0,0,0,0.4)'
@@ -91,12 +95,14 @@ class Play extends Component {
     this.rotating = false
     this.rotateAnimation.stop()
   }
-  componentDidUpdate () {
-    const { music } = this.props
-    if (music.playerState === TrackPlayerType.STATE_PLAYING) {
-      this.startRotate()
-    } else {
-      this.stopRotate()
+  onNavigatorEvent (event) {
+    if (event.id === 'didAppear') {
+      const { music } = this.props
+      if (music.playerState === TrackPlayerType.STATE_PLAYING) {
+        this.startRotate()
+      } else {
+        this.stopRotate()
+      }
     }
   }
   render () {

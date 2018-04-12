@@ -117,7 +117,6 @@ class Music {
     this.list.forEach((item, index) => {
       if (item.id === this.trackId) {
         current = index + 1 > this.list.length - 1 ? 0 : index + 1
-        console.log(`当前${index},下一个${current}`, Array.from(this.list))
       }
     })
     
