@@ -1,4 +1,6 @@
-![cover](https://github.com/meowuu/siren/raw/master/screenshots/cover.png?raw=true)
+<div align="center">
+ <img src="https://github.com/moonou/siren/raw/master/screenshots/cover.jpg?raw=true" alt="cover"/>
+</div>
 # 简介
 
 基于[React Native](https://github.com/facebook/react-native)编写的音乐App，项目为实现性质，用于学习React Native开发，项目中代码的健壮性也有待提升，欢迎进行PR。
