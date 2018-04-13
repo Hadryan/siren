@@ -97,13 +97,21 @@ class Play extends Component {
   }
   onNavigatorEvent (event) {
     if (event.id === 'didAppear') {
-      const { music } = this.props
-      if (music.playerState === TrackPlayerType.STATE_PLAYING) {
-        this.startRotate()
-      } else {
-        this.stopRotate()
-      }
+      this.updateUI()
     }
+  }
+  // update animation state
+  updateUI () {
+    const { music } = this.props
+    if (music.playerState === TrackPlayerType.STATE_PLAYING) {
+      this.startRotate()
+    } else {
+      this.stopRotate()
+    }
+  }
+  
+  componentDidUpdate (prevProps) {
+    this.updateUI()
   }
   render () {
     const { music } = this.props
