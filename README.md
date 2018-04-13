@@ -4,7 +4,7 @@
 
 # 简介
 
-基于[React Native](https://github.com/facebook/react-native)编写的音乐App，项目为实现性质，用于学习React Native开发，项目中代码的健壮性也有待提升，欢迎进行PR。
+基于[React Native](https://github.com/facebook/react-native)编写的音乐App，项目为实验性质，用于学习React Native开发，项目中代码的健壮性也有待提升，欢迎进行PR。
 
 项目数据使用网易云音乐接口，感谢以下项目:
 * musicbox https://github.com/darknessomi/musicbox
