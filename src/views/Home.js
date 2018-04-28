@@ -17,6 +17,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import TrackPlayer from 'react-native-track-player'
 import TrackPlayerType from '../lib/TrackPlayerType'
+import SkeletonItem from '../components/SkeletonItem'
 
 import Panel from '../components/Panel'
 import PlayList from '../components/PlayList'
@@ -25,6 +26,33 @@ import PlayController from '../components/PlayController'
 import MusicList from '../components/MusicList'
 
 import Api from '../lib/api'
+
+class SkeletenComponent extends Component {
+  render () {
+    return (
+      <View>
+        <View>
+          <SkeletonItem
+            style={{
+              width: 150,
+              height: 150,
+              borderRadius: 10
+            }}
+          ></SkeletonItem>
+          
+          <SkeletonItem
+            style={{
+              width: 150,
+              height: 15,
+              borderRadius: 5,
+              marginTop: 10
+            }}
+          ></SkeletonItem>
+        </View>
+      </View>
+    )
+  }
+}
 
 @inject('music')
 @observer
@@ -111,45 +139,53 @@ class Home extends Component {
             <Panel
               title="推荐"
             >
-              <FlatList
-                horizontal
-                data={this.state.topList}
-                keyExtractor={(_, index) => `list${index}`}
-                renderItem={({item, index}) => 
-                  <View style={{
-                    marginRight: index === this.state.topList.length - 1 ? 0 : 30
-                  }}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        this.props.navigator.push({
-                          screen: 'crnaproject.Musiclist',
-                          passProps: {
-                            id: item.id
-                          }
-                        })
-                      }}
-                    >
-                      <PlayList data={item} />
-                    </TouchableOpacity>
-                  </View>
-                }
-              ></FlatList>
+              {
+                this.state.refreshing ?
+                <SkeletenComponent></SkeletenComponent> :
+                <FlatList
+                  horizontal
+                  data={this.state.topList}
+                  keyExtractor={(_, index) => `list${index}`}
+                  renderItem={({item, index}) => 
+                    <View style={{
+                      marginRight: index === this.state.topList.length - 1 ? 0 : 30
+                    }}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.props.navigator.push({
+                            screen: 'crnaproject.Musiclist',
+                            passProps: {
+                              id: item.id
+                            }
+                          })
+                        }}
+                      >
+                        <PlayList data={item} />
+                      </TouchableOpacity>
+                    </View>
+                  }
+                ></FlatList>
+              }
             </Panel>
             <Panel
               title="最新专辑"
             >
-              <FlatList
-                horizontal
-                data={this.state.newAlbums}
-                keyExtractor={(_, index) => `list${index}`}
-                renderItem={({item, index}) => 
-                  <View style={{
-                    marginRight: index === this.state.newAlbums.length - 1 ? 0 : 30
-                  }}>
-                    <Album data={item} />
-                  </View>
-                }
-              ></FlatList>
+              {
+                this.state.refreshing ?
+                <SkeletenComponent></SkeletenComponent> :
+                <FlatList
+                  horizontal
+                  data={this.state.newAlbums}
+                  keyExtractor={(_, index) => `list${index}`}
+                  renderItem={({item, index}) => 
+                    <View style={{
+                      marginRight: index === this.state.newAlbums.length - 1 ? 0 : 30
+                    }}>
+                      <Album data={item} />
+                    </View>
+                  }
+                ></FlatList>
+              }
             </Panel>
           </ScrollView>
         </View>
