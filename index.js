@@ -1,6 +1,7 @@
 import { Navigation } from 'react-native-navigation'
 
 import Home from './src/views/Home'
+// import Home from './src/views/Musiclist'
 import Search from './src/views/Search'
 import Play from './src/views/Play'
 import Notice from './src/components/Notice'

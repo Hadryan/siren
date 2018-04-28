@@ -8,14 +8,16 @@ import {
   Animated,
   FlatList,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
+  Easing
 } from 'react-native'
 import {
   inject,
   observer
 } from 'mobx-react'
-import Icon from '../lib/icon'
+import SkeletonItem from '../components/SkeletonItem'
 
+import Icon from '../lib/icon'
 import api from '../lib/api'
 import { durationFormat } from '../lib/tools'
 
@@ -105,6 +107,42 @@ class PlayAll extends Component {
   }
 }
 
+// skeleton component
+class Skeleton extends Component {
+  render () {
+    return (
+      <View>
+        <View style={styles.header}>
+          <SkeletonItem borderRadius={10} style={{ height: 130, width: 130}}></SkeletonItem>
+          <View style={{
+            flex: 1,
+            marginLeft: 20
+          }}>
+            <SkeletonItem borderRadius={4} style={{ height: 20 }}></SkeletonItem>
+            <SkeletonItem borderRadius={4} style={{ height: 20, marginTop: 5 }}></SkeletonItem>
+          </View>
+        </View>
+        <View style={styles.info}>
+          <SkeletonItem borderRadius={4} style={{ height: 15 }}></SkeletonItem>
+          <SkeletonItem borderRadius={4} style={{ height: 15, marginTop: 5 }}></SkeletonItem>
+          <SkeletonItem borderRadius={4} style={{ height: 15, marginTop: 5 }}></SkeletonItem>
+        </View>
+        <View style={{
+          paddingLeft: 10,
+          paddingRight: 10,
+          paddingBottom: 20,
+          backgroundColor: '#fff'
+        }}>
+          <SkeletonItem borderRadius={4} style={{
+            height: 45,
+            marginTop: 30
+          }}></SkeletonItem>
+        </View>
+      </View>
+    )
+  }
+}
+
 @inject('music')
 @observer
 class Musiclist extends Component {
@@ -118,111 +156,117 @@ class Musiclist extends Component {
     tracks: [],
     name: '',
     cover: '',
-    description: ''
+    description: '',
+    fetch: true
   }
   componentDidMount () {
     api.getMusiclistDetail(this.props.id)
       .then((data) => {
         const { playlist } = data
-        console.log(playlist)
         this.setState({
           name: playlist.name,
           description: playlist.description,
           cover: playlist.coverImgUrl,
-          tracks: playlist.tracks
+          tracks: playlist.tracks,
+          fetch: false
         })
       })
   }
   render () {
     const { music } = this.props
+    
     return (
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, backgroundColor: '#fff'}}>
         <StatusBar
           barStyle="dark-content"
           translucent
         ></StatusBar>
 
-        <AnimatedFlatList
-            data={
-              [
-                {
-                  id: 1,
-                  component: <HeaderComponent
-                    style={{
-                      opacity: this.state.animatedValue.interpolate({
-                        inputRange: [0, this.state.headerHeight],
-                        outputRange: [1, 0]
-                      })
-                    }}
-                    name={this.state.name}
-                    cover={this.state.cover}
-                    description={this.state.description}
-                    onLayout={(event) => {
-                      this.setState({
-                        headerHeight: event.nativeEvent.layout.height
-                      })
-                    }}
-                  ></HeaderComponent>
-                },
-                {
-                  id: 2,
-                  component: 
-                  <TouchableOpacity
-                    onPress={() => {
-                      music.playList(this.state.tracks.map((item) => {
-                        return {
-                          id: String(item.id),
-                          title: item.name,
-                          artist: item.ar.map(i => i.name).join('/')
-                        }
-                      }))
-                        .then(() => {
-                          this.props.navigator.push({
-                            screen: 'crnaproject.Play'
-                          })
+        {
+          this.state.fetch ?
+          <Skeleton></Skeleton> :
+          <AnimatedFlatList
+              data={
+                [
+                  {
+                    id: 1,
+                    component: <HeaderComponent
+                      style={{
+                        opacity: this.state.animatedValue.interpolate({
+                          inputRange: [0, this.state.headerHeight],
+                          outputRange: [1, 0]
                         })
-                    }}
-                  >
-                    <PlayAll></PlayAll>
-                  </TouchableOpacity>
-                },
-                {
-                  id: 3,
-                  component: <View style={styles.divide}></View>
-                }
-              ].concat(this.state.tracks)
-            }
-            style={{height: 200}}
-            renderItem={({item}) =>
-              item.component ?
-              item.component :
-              <TouchableOpacity
-                onPress={() => {
-                  music.fetchPlay({
-                    ...item,
-                    artists: item.ar
-                  })
-                    .then(() => {
-                      this.props.navigator.push({
-                        screen: 'crnaproject.Play'
-                      })
+                      }}
+                      name={this.state.name}
+                      cover={this.state.cover}
+                      description={this.state.description}
+                      onLayout={(event) => {
+                        this.setState({
+                          headerHeight: event.nativeEvent.layout.height
+                        })
+                      }}
+                    ></HeaderComponent>
+                  },
+                  {
+                    id: 2,
+                    component: 
+                    <TouchableOpacity
+                      onPress={() => {
+                        music.playList(this.state.tracks.map((item) => {
+                          return {
+                            id: String(item.id),
+                            title: item.name,
+                            artist: item.ar.map(i => i.name).join('/')
+                          }
+                        }))
+                          .then(() => {
+                            this.props.navigator.push({
+                              screen: 'crnaproject.Play'
+                            })
+                          })
+                      }}
+                    >
+                      <PlayAll></PlayAll>
+                    </TouchableOpacity>
+                  },
+                  {
+                    id: 3,
+                    component: <View style={styles.divide}></View>
+                  }
+                ].concat(this.state.tracks)
+              }
+              style={{height: 200}}
+              renderItem={({item}) =>
+                item.component ?
+                item.component :
+                <TouchableOpacity
+                  onPress={() => {
+                    music.fetchPlay({
+                      ...item,
+                      artists: item.ar
                     })
-                }}
-              >
-                <MusicItem data={item}></MusicItem>
-              </TouchableOpacity>
-            }
-            stickyHeaderIndices={[1]}
-            onScroll={(event) => {
-              Animated.event([
-                {
-                  y: this.state.animatedValue
-                }
-              ])(event.nativeEvent.contentOffset)
-            }}
-            keyExtractor={(item) => item.id}
-          >
-        </AnimatedFlatList>
+                      .then(() => {
+                        this.props.navigator.push({
+                          screen: 'crnaproject.Play'
+                        })
+                      })
+                  }}
+                >
+                  <MusicItem data={item}></MusicItem>
+                </TouchableOpacity>
+              }
+              stickyHeaderIndices={[1]}
+              onScroll={(event) => {
+                Animated.event([
+                  {
+                    y: this.state.animatedValue
+                  }
+                ])(event.nativeEvent.contentOffset)
+              }}
+              keyExtractor={(item) => item.id}
+            >
+          </AnimatedFlatList>
+        }
       </View>
     )
   }
