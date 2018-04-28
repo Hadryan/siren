@@ -8,8 +8,7 @@ import {
   Animated,
   FlatList,
   Dimensions,
-  TouchableOpacity,
-  Easing
+  TouchableOpacity
 } from 'react-native'
 import {
   inject,
